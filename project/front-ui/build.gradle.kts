@@ -1,5 +1,12 @@
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+
+    implementation("org.keycloak:keycloak-admin-client:26.0.5")
+
+    implementation(project(":project:user"))
 }
 
 tasks.jar {

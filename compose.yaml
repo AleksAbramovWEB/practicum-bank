@@ -1,9 +1,28 @@
 services:
   postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+    image: postgres:16
+    container_name: postgres_practicum_bank
     ports:
-      - '5432'
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  keycloak:
+    image: keycloak/keycloak:26.2.4
+    container_name: keycloak_practicum_bank
+    env_file:
+      - .env
+    ports:
+      - "8480:8080"
+      - "8454:5005"
+    volumes:
+      - keycloak_data:/opt/keycloak/data/import
+      - ./keycloak-themes:/opt/keycloak/themes
+    command:
+      - start-dev
+
+volumes:
+  postgres_data:
+  keycloak_data:
