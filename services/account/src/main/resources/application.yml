@@ -1,0 +1,36 @@
+
+spring:
+  application:
+    name: practicum-bank-account-service
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${ACCOUNT_SERVICE_POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    sql-migration-suffixes: .sql
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: ${ACCOUNT_SERVICE_OAUTH2_CLIENT_ID}
+            client-secret: ${ACCOUNT_SERVICE_OAUTH2_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid, profile, email
+        provider:
+          keycloak:
+            issuer-uri: "${KEYCLOAK_URL}/realms/${OAUTH2_REALM}"
+
+server:
+  port: 8081
