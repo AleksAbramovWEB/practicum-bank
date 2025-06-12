@@ -1,12 +1,26 @@
+server:
+  port: 8081
+  forward-headers-strategy: framework
 
 spring:
   application:
-    name: practicum-bank-frontend-ui
+    name: frontend-ui
+
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
     mode: HTML
     encoding: UTF-8
+
   security:
     oauth2:
       client:
@@ -15,7 +29,7 @@ spring:
             client-id: ${FRONTEND_UI_OAUTH2_CLIENT_ID}
             client-secret: ${FRONTEND_UI_OAUTH2_CLIENT_SECRET}
             authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri: "${BASE_URL}/login/oauth2/code/{registrationId}"
             scope: openid, profile, email
         provider:
           keycloak:

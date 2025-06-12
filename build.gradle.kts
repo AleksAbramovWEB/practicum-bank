@@ -41,8 +41,9 @@ subprojects {
     }
 
     dependencies {
-        implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-        implementation("org.springframework.boot:spring-boot-starter-web")
+        implementation("org.springframework.boot:spring-boot-starter-actuator")
+        implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
+
         implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
         compileOnly("org.projectlombok:lombok")
         developmentOnly("org.springframework.boot:spring-boot-devtools")

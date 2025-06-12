@@ -12,7 +12,7 @@ import ru.abramov.practicum.bank.service.account.service.UserAccountService;
 import java.util.List;
 
 @RestController
-@RequestMapping("account/user")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserAccountController {
 

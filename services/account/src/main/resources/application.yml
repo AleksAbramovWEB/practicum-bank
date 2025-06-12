@@ -1,7 +1,10 @@
 
+server:
+  port: 8082
+
 spring:
   application:
-    name: practicum-bank-account-service
+    name: account
 
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${ACCOUNT_SERVICE_POSTGRES_DB}
@@ -31,6 +34,3 @@ spring:
         provider:
           keycloak:
             issuer-uri: "${KEYCLOAK_URL}/realms/${OAUTH2_REALM}"
-
-server:
-  port: 8081
