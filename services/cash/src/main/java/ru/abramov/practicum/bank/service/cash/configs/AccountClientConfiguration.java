@@ -1,4 +1,4 @@
-package ru.abramov.practicum.bank.ui.config;
+package ru.abramov.practicum.bank.service.cash.configs;
 
 import feign.Feign;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,7 @@ public class AccountClientConfiguration {
                                        @Value("${api.account}") String baseUrl) {
 
         return feignBuilder
-                .requestInterceptor(authConfig.userTokenRelayInterceptor())
+                .requestInterceptor(authConfig.jwtRelayInterceptor())
                 .logger(new feign.slf4j.Slf4jLogger(AccountApi.class))
                 .target(AccountApi.class, baseUrl);
     }

@@ -53,6 +53,9 @@ subprojects {
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
         implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+        implementation("io.github.openfeign:feign-httpclient")
+
+
         implementation("io.github.openfeign:feign-jackson")
         implementation("io.swagger.core.v3:swagger-annotations:2.2.31")
         implementation("org.openapitools:jackson-databind-nullable:0.2.6")

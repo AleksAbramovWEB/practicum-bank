@@ -13,3 +13,4 @@ include("gateway")
 include("config")
 
 include("clients:account")
+include("clients:cash")

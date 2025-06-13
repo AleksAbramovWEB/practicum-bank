@@ -27,6 +27,7 @@ public class GatewayRoutesConfig {
 
         for (String serviceName : services) {
             if (serviceName.equalsIgnoreCase("gateway")) continue;
+            if (serviceName.equalsIgnoreCase("config")) continue;
 
             List<ServiceInstance> instances = discoveryClient.getInstances(serviceName);
             if (instances.isEmpty()) continue;
@@ -35,7 +36,7 @@ public class GatewayRoutesConfig {
             String targetUri = instance.getUri().toString();
 
             if (serviceName.equals("frontend-ui")) {
-                List<String> uiPaths = List.of("/", "/user/**", "/login/oauth2/code/**", "/oauth2/**", "/account", "/account/**");
+                List<String> uiPaths = List.of("/", "/user/**", "/login/oauth2/code/**", "/oauth2/**", "/account", "/account/**", "/cash/**");
                 for (String path : uiPaths) {
                     routes.route("route-" + serviceName + "-" + path.replaceAll("[^a-zA-Z0-9]", "-"), r -> r
                             .path(path)

@@ -184,6 +184,10 @@ components:
           $ref: '#/components/schemas/AccountStatus'
         currency:
           $ref: '#/components/schemas/Currency'
+        version:
+          type: integer
+          format: int64
+          example: 5
 
     OpenAccountDto:
       type: object

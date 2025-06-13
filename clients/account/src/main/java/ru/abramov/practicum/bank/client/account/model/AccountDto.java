@@ -23,7 +23,7 @@ import jakarta.annotation.Generated;
  * AccountDto
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-13T22:04:39.498320+03:00[Europe/Moscow]", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-13T22:41:27.854509+03:00[Europe/Moscow]", comments = "Generator version: 7.12.0")
 public class AccountDto {
 
   private @Nullable Long id;
@@ -37,6 +37,8 @@ public class AccountDto {
   private @Nullable AccountStatus status;
 
   private @Nullable Currency currency;
+
+  private @Nullable Long version;
 
   public AccountDto id(Long id) {
     this.id = id;
@@ -158,6 +160,26 @@ public class AccountDto {
     this.currency = currency;
   }
 
+  public AccountDto version(Long version) {
+    this.version = version;
+    return this;
+  }
+
+  /**
+   * Get version
+   * @return version
+   */
+  
+  @Schema(name = "version", example = "5", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("version")
+  public Long getVersion() {
+    return version;
+  }
+
+  public void setVersion(Long version) {
+    this.version = version;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -172,12 +194,13 @@ public class AccountDto {
         Objects.equals(this.userId, accountDto.userId) &&
         Objects.equals(this.balance, accountDto.balance) &&
         Objects.equals(this.status, accountDto.status) &&
-        Objects.equals(this.currency, accountDto.currency);
+        Objects.equals(this.currency, accountDto.currency) &&
+        Objects.equals(this.version, accountDto.version);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, number, userId, balance, status, currency);
+    return Objects.hash(id, number, userId, balance, status, currency, version);
   }
 
   @Override
@@ -190,6 +213,7 @@ public class AccountDto {
     sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
+    sb.append("    version: ").append(toIndentedString(version)).append("\n");
     sb.append("}");
     return sb.toString();
   }
