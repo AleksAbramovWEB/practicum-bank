@@ -1,28 +1,17 @@
-
-server:
-  port: 8082
-
 spring:
+  config:
+    import: "configserver:"
+
   application:
     name: account
 
-  datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${ACCOUNT_SERVICE_POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+  cloud:
+    config:
+      uri: ${CONFIG_URL}
+      fail-fast: true
 
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    sql-migration-suffixes: .sql
-
-  jpa:
-    open-in-view: false
-    hibernate:
-      ddl-auto: validate
-
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: "${KEYCLOAK_URL}/realms/${OAUTH2_REALM}"
+logging:
+  level:
+    org.springframework.cloud.vault: DEBUG
+    org.springframework.cloud.config: DEBUG
+    org.springframework.boot.env: DEBUG

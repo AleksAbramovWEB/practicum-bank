@@ -1,52 +1,11 @@
-server:
-  port: 8081
-  forward-headers-strategy: framework
-
 spring:
+  config:
+    import: "configserver:"
+
   application:
     name: frontend-ui
 
   cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        prefer-ip-address: true
-        health-check-path: /actuator/health
-        health-check-interval: 10s
-
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    mode: HTML
-    encoding: UTF-8
-
-  security:
-    oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: ${FRONTEND_UI_OAUTH2_CLIENT_ID}
-            client-secret: ${FRONTEND_UI_OAUTH2_CLIENT_SECRET}
-            authorization-grant-type: authorization_code
-            redirect-uri: "${BASE_URL}/login/oauth2/code/{registrationId}"
-            scope: openid, profile, email
-        provider:
-          keycloak:
-            issuer-uri: "${KEYCLOAK_URL}/realms/${OAUTH2_REALM}"
-
-
-keycloak-admin:
-  server-url: ${KEYCLOAK_URL}
-  username: ${KEYCLOAK_ADMIN}
-  password:  ${KEYCLOAK_ADMIN_PASSWORD}
-  realm:  ${OAUTH2_REALM}
-
-logging:
-  level:
-    feign: DEBUG
-    feign.Logger: DEBUG
-    ru.abramov.practicum.bank.client: DEBUG
-
-api:
-  account: "${BASE_URL}/api/account"
+    config:
+      uri: ${CONFIG_URL}
+      fail-fast: true
