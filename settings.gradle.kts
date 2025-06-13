@@ -10,3 +10,5 @@ include("services:notification")
 include("services:transfer")
 include("common")
 include("gateway")
+
+include("clients:account")

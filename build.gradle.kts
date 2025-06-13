@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.0"
     id("io.spring.dependency-management") version "1.1.7"
+    id("org.openapi.generator") version "7.12.0"
 }
 
 group = "ru.abramov.practicum"
@@ -17,6 +18,7 @@ subprojects {
     apply(plugin = "java")
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "org.springframework.boot")
+    apply(plugin = "org.openapi.generator")
 
     java {
         toolchain {
@@ -44,13 +46,18 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-actuator")
         implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
 
-        implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
         compileOnly("org.projectlombok:lombok")
         developmentOnly("org.springframework.boot:spring-boot-devtools")
-        developmentOnly("org.springframework.boot:spring-boot-docker-compose")
         annotationProcessor("org.projectlombok:lombok")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+        implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+        implementation("io.github.openfeign:feign-jackson")
+        implementation("io.swagger.core.v3:swagger-annotations:2.2.31")
+        implementation("org.openapitools:jackson-databind-nullable:0.2.6")
+        implementation("com.fasterxml.jackson.core:jackson-annotations")
     }
 
 

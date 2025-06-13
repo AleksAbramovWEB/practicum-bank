@@ -23,14 +23,6 @@ spring:
 
   security:
     oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: ${ACCOUNT_SERVICE_OAUTH2_CLIENT_ID}
-            client-secret: ${ACCOUNT_SERVICE_OAUTH2_CLIENT_SECRET}
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            scope: openid, profile, email
-        provider:
-          keycloak:
-            issuer-uri: "${KEYCLOAK_URL}/realms/${OAUTH2_REALM}"
+      resourceserver:
+        jwt:
+          issuer-uri: "${KEYCLOAK_URL}/realms/${OAUTH2_REALM}"

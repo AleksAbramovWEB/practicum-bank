@@ -41,3 +41,12 @@ keycloak-admin:
   username: ${KEYCLOAK_ADMIN}
   password:  ${KEYCLOAK_ADMIN_PASSWORD}
   realm:  ${OAUTH2_REALM}
+
+logging:
+  level:
+    feign: DEBUG
+    feign.Logger: DEBUG
+    ru.abramov.practicum.bank.client: DEBUG
+
+api:
+  account: "${BASE_URL}/api/account"

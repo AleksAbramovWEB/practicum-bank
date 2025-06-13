@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -30,12 +32,27 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User principal)) {
+        if (authentication == null) {
             return null;
         }
 
-        Map<String, Object> attributes = principal.getAttributes();
+        if (authentication.getPrincipal() instanceof OAuth2User principal) {
+            return mapToUser(principal.getAttributes());
+        }
 
+        if (authentication.getPrincipal() instanceof DefaultOidcUser principal) {
+            return mapToUser(principal.getAttributes());
+        }
+
+        if (authentication.getPrincipal() instanceof Jwt principal) {
+            return mapToUser(principal.getClaims());
+        }
+
+
+        return null;
+    }
+
+    private User mapToUser(Map<String, Object> attributes) {
         User user = new User();
 
         user.setId((String) attributes.get("sub"));

@@ -8,6 +8,7 @@ dependencies {
     implementation("org.keycloak:keycloak-admin-client:26.0.5")
 
     implementation(project(":common"))
+    implementation(project(":clients:account"))
 }
 
 tasks.jar {
