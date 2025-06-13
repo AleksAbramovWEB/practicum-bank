@@ -105,11 +105,10 @@
     </td></tr>
     <tr><td style="padding:2px;">
         <div style="width:100%;margin-left:auto;margin-right:auto;border-radius:2%;padding:10px;background-color:whitesmoke;">
-            <h3>Счета</h3>
+            <h4>Счета</h4>
             <table style="width:100%;margin-left:auto;margin-right:auto;border-radius:2%;padding:10px;background-color:whitesmoke;">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Номер</th>
                     <th>Баланс</th>
                     <th>Валюта</th>
@@ -119,12 +118,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="account : ${accounts}">
-                    <td th:text="${account.id}">1</td>
-                    <td th:text="${account.number}">40817810099910004321</td>
-                    <td th:text="${account.balance}">15000.75</td>
-                    <td th:text="${account.currency}">RUB</td>
-                    <td th:text="${account.status}">ACTIVE</td>
-                    <td>
+                    <td style="text-align: center" th:text="${account.number}">40817810099910004321</td>
+                    <td style="text-align: center" th:text="${account.balance}">15000.75</td>
+                    <td style="text-align: center" th:text="${account.currency}">RUB</td>
+                    <td style="text-align: center" th:text="${account.status}">ACTIVE</td>
+                    <td style="text-align: center">
                         <form th:action="@{'/account/delete/' + ${account.id}}" method="post" class="inline">
                             <button type="submit">🗑 Удалить</button>
                         </form>
@@ -133,6 +131,7 @@
                 </tbody>
             </table>
             <br>
+            <h4>Открытие счета</h4>
             <form th:action="@{/account}" method="post" th:object="${account}">
                 <label>Номер счета:
                     <input type="text" th:field="*{number}" required />
