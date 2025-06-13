@@ -40,6 +40,9 @@ public class Account extends AbstractPersistable<Long> {
     @Column(nullable = false)
     private Currency currency;
 
+    @Version
+    private Long version;
+
     @CreationTimestamp
     private Instant created;
 

@@ -6,6 +6,8 @@
 package ru.abramov.practicum.bank.client.account.api;
 
 import ru.abramov.practicum.bank.client.account.model.AccountDto;
+import ru.abramov.practicum.bank.client.account.model.ChangeBalanceDto;
+import ru.abramov.practicum.bank.client.account.model.OpenAccountDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-13T12:22:27.312782+03:00[Europe/Moscow]", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-13T22:04:39.498320+03:00[Europe/Moscow]", comments = "Generator version: 7.12.0")
 @Validated
 @Tag(name = "Account", description = "the Account API")
 public interface AccountApi {
@@ -40,7 +42,7 @@ public interface AccountApi {
     /**
      * POST /user : Создать новый счёт
      *
-     * @param accountDto  (required)
+     * @param openAccountDto  (required)
      * @return Счёт успешно создан (status code 201)
      */
     @Operation(
@@ -51,6 +53,9 @@ public interface AccountApi {
             @ApiResponse(responseCode = "201", description = "Счёт успешно создан", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = AccountDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
         }
     )
     @RequestMapping(
@@ -62,14 +67,73 @@ public interface AccountApi {
     @ResponseStatus(HttpStatus.CREATED)
     
     AccountDto addAccount(
-        @Parameter(name = "AccountDto", description = "", required = true) @Valid @RequestBody AccountDto accountDto
+        @Parameter(name = "OpenAccountDto", description = "", required = true) @Valid @RequestBody OpenAccountDto openAccountDto
     );
 
 
     /**
-     * DELETE /user/{id} : Удалить счёт по ID
+     * PATCH /{id}/block : Заблокировать счёт
      *
      * @param id ID счёта (required)
+     * @return Счёт заблокирован (status code 200)
+     */
+    @Operation(
+        operationId = "blockAccount",
+        summary = "Заблокировать счёт",
+        tags = { "Account" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Счёт заблокирован")
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/{id}/block"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    
+    void blockAccount(
+        @Parameter(name = "id", description = "ID счёта", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+    );
+
+
+    /**
+     * PATCH /{id}/balance : Изменить баланс счёта
+     *
+     * @param id ID счёта (required)
+     * @param changeBalanceDto  (required)
+     * @return Баланс успешно изменён (status code 200)
+     */
+    @Operation(
+        operationId = "changeBalance",
+        summary = "Изменить баланс счёта",
+        tags = { "Account" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Баланс успешно изменён")
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/{id}/balance",
+        consumes = "application/json"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    
+    void changeBalance(
+        @Parameter(name = "id", description = "ID счёта", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
+        @Parameter(name = "ChangeBalanceDto", description = "", required = true) @Valid @RequestBody ChangeBalanceDto changeBalanceDto
+    );
+
+
+    /**
+     * DELETE /user/{userId} : Удалить счёт по ID
+     *
+     * @param userId ID счёта (required)
      * @return Счёт удалён (status code 200)
      */
     @Operation(
@@ -78,60 +142,100 @@ public interface AccountApi {
         tags = { "Account" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Счёт удалён")
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
         }
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/user/{id}"
+        value = "/user/{userId}"
     )
     @ResponseStatus(HttpStatus.OK)
     
     void deleteAccount(
-        @Parameter(name = "id", description = "ID счёта", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+        @Parameter(name = "userId", description = "ID счёта", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
     );
 
 
     /**
-     * GET /user/{id} : Получить счёт по ID
+     * GET /{numberAccount} : Получить счёт по номеру
      *
-     * @param id ID счёта (required)
+     * @param numberAccount Номер счёта (required)
      * @return Данные счёта (status code 200)
      */
     @Operation(
-        operationId = "getAccount",
-        summary = "Получить счёт по ID",
+        operationId = "getAccountByNumber",
+        summary = "Получить счёт по номеру",
         tags = { "Account" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Данные счёта", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = AccountDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/user/{id}",
+        value = "/{numberAccount}",
         produces = { "application/json" }
     )
     @ResponseStatus(HttpStatus.OK)
     
-    AccountDto getAccount(
-        @Parameter(name = "id", description = "ID счёта", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+    AccountDto getAccountByNumber(
+        @Parameter(name = "numberAccount", description = "Номер счёта", required = true, in = ParameterIn.PATH) @PathVariable("numberAccount") String numberAccount
     );
 
 
     /**
-     * GET /user : Получить список счетов пользователя
+     * GET /user/{userId} : Получить счета по ID пользователя
      *
+     * @param userId Идентификатор пользователя (required)
      * @return Список счетов (status code 200)
      */
     @Operation(
-        operationId = "getAccounts",
-        summary = "Получить список счетов пользователя",
+        operationId = "getAccountsByUserId",
+        summary = "Получить счета по ID пользователя",
         tags = { "Account" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Список счетов", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDto.class)))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/user/{userId}",
+        produces = { "application/json" }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    
+    List<AccountDto> getAccountsByUserId(
+        @Parameter(name = "userId", description = "Идентификатор пользователя", required = true, in = ParameterIn.PATH) @PathVariable("userId") String userId
+    );
+
+
+    /**
+     * GET /user : Получить список счетов текущего пользователя
+     *
+     * @return Список счетов (status code 200)
+     */
+    @Operation(
+        operationId = "getCurrentUserAccounts",
+        summary = "Получить список счетов текущего пользователя",
+        tags = { "Account" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Список счетов", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AccountDto.class)))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
         }
     )
     @RequestMapping(
@@ -141,7 +245,7 @@ public interface AccountApi {
     )
     @ResponseStatus(HttpStatus.OK)
     
-    List<AccountDto> getAccounts(
+    List<AccountDto> getCurrentUserAccounts(
         
     );
 

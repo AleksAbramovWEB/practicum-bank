@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.abramov.practicum.bank.common.annotation.CurrentUser;
 import ru.abramov.practicum.bank.service.account.dto.AccountDto;
 import ru.abramov.practicum.bank.common.model.User;
-import ru.abramov.practicum.bank.service.account.service.UserAccountService;
+import ru.abramov.practicum.bank.service.account.dto.OpenAccountDto;
+import ru.abramov.practicum.bank.service.account.service.AccountService;
 
 import java.util.List;
 
@@ -16,22 +17,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserAccountController {
 
-    private final UserAccountService userAccountService;
+    private final AccountService userAccountService;
 
     @GetMapping
     public ResponseEntity<List<AccountDto>> getAccounts(@CurrentUser User user) {
-        return ResponseEntity.ok(userAccountService.getAccounts(user));
+        return ResponseEntity.ok(userAccountService.getAccounts(user.getId()));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AccountDto> getAccount(@CurrentUser User user, @PathVariable Long id) {
-        return ResponseEntity.ok(userAccountService.getAccount(user, id));
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<AccountDto>> getAccounts(@PathVariable String userId) {
+        return ResponseEntity.ok(userAccountService.getAccounts(userId));
     }
 
     @PostMapping
-    public ResponseEntity<AccountDto> addAccount(@CurrentUser User user, @RequestBody AccountDto accountDto) {
+    public ResponseEntity<AccountDto> addAccount(@CurrentUser User user, @RequestBody OpenAccountDto openAccountDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userAccountService.addAccount(user, accountDto));
+                .body(userAccountService.openAccount(user, openAccountDto.getCurrency()));
     }
 
     @DeleteMapping("/{id}")

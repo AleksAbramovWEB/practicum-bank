@@ -1,11 +1,11 @@
 package ru.abramov.practicum.bank.client.account.model;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.math.BigDecimal;
 import org.springframework.lang.Nullable;
 import ru.abramov.practicum.bank.client.account.model.AccountStatus;
 import ru.abramov.practicum.bank.client.account.model.Currency;
@@ -23,7 +23,7 @@ import jakarta.annotation.Generated;
  * AccountDto
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-13T12:22:27.312782+03:00[Europe/Moscow]", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-06-13T22:04:39.498320+03:00[Europe/Moscow]", comments = "Generator version: 7.12.0")
 public class AccountDto {
 
   private @Nullable Long id;
@@ -104,11 +104,11 @@ public class AccountDto {
   }
 
   /**
-   * Get balance
+   * Сумма на счете (BigDecimal)
    * @return balance
    */
-  
-  @Schema(name = "balance", example = "15000.75", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Valid 
+  @Schema(name = "balance", example = "5000.00", description = "Сумма на счете (BigDecimal)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("balance")
   public BigDecimal getBalance() {
     return balance;

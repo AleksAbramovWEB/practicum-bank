@@ -133,12 +133,6 @@
             <br>
             <h4>Открытие счета</h4>
             <form th:action="@{/account}" method="post" th:object="${account}">
-                <label>Номер счета:
-                    <input type="text" th:field="*{number}" required />
-                </label><br/>
-                <label>Баланс:
-                    <input type="number" step="0.01" th:field="*{balance}" required />
-                </label><br/>
                 <label>Валюта:
                     <select th:field="*{currency}">
                         <option th:value="RUB">RUB</option>

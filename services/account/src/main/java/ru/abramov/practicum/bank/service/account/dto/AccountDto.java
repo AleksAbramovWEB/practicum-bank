@@ -20,4 +20,6 @@ public class AccountDto {
     private AccountStatus status;
 
     private Currency currency;
+
+    private Long version;
 }

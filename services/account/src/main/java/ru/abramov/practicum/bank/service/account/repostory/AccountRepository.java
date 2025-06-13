@@ -6,12 +6,13 @@ import ru.abramov.practicum.bank.service.account.model.Currency;
 import ru.abramov.practicum.bank.service.account.model.Account;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> getAllByUserId(String userId);
 
-    Boolean existsAccountByNumber(String number);
+    Optional<Account> getByNumber(String number);
 
     Boolean existsByCurrencyAndUserId(Currency currency, String userId);
 }

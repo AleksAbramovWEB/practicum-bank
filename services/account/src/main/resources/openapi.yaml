@@ -13,8 +13,8 @@ security:
 paths:
   /user:
     get:
-      summary: Получить список счетов пользователя
-      operationId: getAccounts
+      summary: Получить список счетов текущего пользователя
+      operationId: getCurrentUserAccounts
       tags:
         - Account
       security:
@@ -40,7 +40,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccountDto'
+              $ref: '#/components/schemas/OpenAccountDto'
       responses:
         '201':
           description: Счёт успешно создан
@@ -49,29 +49,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccountDto'
 
-  /user/{id}:
+  /user/{userId}:
     get:
-      summary: Получить счёт по ID
-      operationId: getAccount
+      summary: Получить счета по ID пользователя
+      operationId: getAccountsByUserId
       tags:
         - Account
-      security:
-        - bearerAuth: [ ]
       parameters:
         - in: path
-          name: id
+          name: userId
           required: true
           schema:
-            type: integer
-            format: int64
-          description: ID счёта
+            type: string
+          description: Идентификатор пользователя
       responses:
         '200':
-          description: Данные счёта
+          description: Список счетов
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountDto'
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountDto'
+
     delete:
       summary: Удалить счёт по ID
       operationId: deleteAccount
@@ -81,7 +81,7 @@ paths:
         - bearerAuth: [ ]
       parameters:
         - in: path
-          name: id
+          name: userId
           required: true
           schema:
             type: integer
@@ -91,7 +91,76 @@ paths:
         '200':
           description: Счёт удалён
 
+  /{numberAccount}:
+    get:
+      summary: Получить счёт по номеру
+      operationId: getAccountByNumber
+      tags:
+        - Account
+      parameters:
+        - in: path
+          name: numberAccount
+          required: true
+          schema:
+            type: string
+          description: Номер счёта
+      responses:
+        '200':
+          description: Данные счёта
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+
+  /{id}/block:
+    patch:
+      summary: Заблокировать счёт
+      operationId: blockAccount
+      tags:
+        - Account
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID счёта
+      responses:
+        '200':
+          description: Счёт заблокирован
+
+  /{id}/balance:
+    patch:
+      summary: Изменить баланс счёта
+      operationId: changeBalance
+      tags:
+        - Account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeBalanceDto'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID счёта
+      responses:
+        '200':
+          description: Баланс успешно изменён
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     AccountDto:
       type: object
@@ -107,13 +176,38 @@ components:
           type: string
           example: "user-123"
         balance:
-          type: number
-          format: double
-          example: 15000.75
+          type: string
+          format: decimal
+          example: "5000.00"
+          description: Сумма на счете (BigDecimal)
         status:
           $ref: '#/components/schemas/AccountStatus'
         currency:
           $ref: '#/components/schemas/Currency'
+
+    OpenAccountDto:
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+      required:
+        - currency
+
+    ChangeBalanceDto:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+          example: "5000.00"
+          description: Сумма изменения баланса (BigDecimal)
+        version:
+          type: integer
+          format: int64
+          example: 1
+      required:
+        - amount
+        - version
 
     AccountStatus:
       type: string

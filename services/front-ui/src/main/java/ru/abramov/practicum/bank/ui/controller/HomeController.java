@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.abramov.practicum.bank.client.account.api.AccountApi;
-import ru.abramov.practicum.bank.client.account.model.AccountDto;
+import ru.abramov.practicum.bank.client.account.model.OpenAccountDto;
 import ru.abramov.practicum.bank.ui.dto.PasswordUserFormDto;
 import ru.abramov.practicum.bank.ui.dto.UserFormDto;
 import ru.abramov.practicum.bank.common.annotation.CurrentUser;
@@ -25,8 +25,8 @@ public class HomeController {
         model.addAttribute("userFrom", UserFormDto.of(user));
         model.addAttribute("passwordFrom", new PasswordUserFormDto());
 
-        model.addAttribute("accounts", accountApi.getAccounts());
-        model.addAttribute("account", new AccountDto());
+        model.addAttribute("accounts", accountApi.getCurrentUserAccounts());
+        model.addAttribute("account", new OpenAccountDto());
 
         return "home";
     }
