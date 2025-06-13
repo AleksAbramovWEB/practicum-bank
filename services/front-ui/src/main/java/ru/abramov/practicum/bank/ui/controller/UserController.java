@@ -38,12 +38,9 @@ public class UserController {
     public String edit(@CurrentUser User user, @Valid @ModelAttribute("userFrom") UserFormDto userFormDto, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
-            model.addAttribute("userAccountsErrors", result.getAllErrors());
-            model.addAttribute("user", user);
-            model.addAttribute("userFrom", userFormDto);
-            model.addAttribute("passwordFrom", new PasswordUserFormDto());
+            model.addAttribute("formErrors", result.getAllErrors());
 
-            return "home";
+            return "error";
         }
 
         userService.edit(user, userFormDto);
@@ -55,12 +52,9 @@ public class UserController {
     public String edit(@CurrentUser User user, @Valid @ModelAttribute("passwordFrom") PasswordUserFormDto passwordUserFormDto, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
-            model.addAttribute("passwordErrors", result.getAllErrors());
-            model.addAttribute("user", user);
-            model.addAttribute("userFrom", UserFormDto.of(user));
-            model.addAttribute("passwordFrom", passwordUserFormDto);
+            model.addAttribute("formErrors", result.getAllErrors());
 
-            return "home";
+            return "error";
         }
 
         userService.password(user, passwordUserFormDto);

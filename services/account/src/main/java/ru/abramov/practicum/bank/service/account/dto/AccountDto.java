@@ -1,8 +1,8 @@
-package ru.abramov.practicum.bank.common.dto;
+package ru.abramov.practicum.bank.service.account.dto;
 
 import lombok.Data;
-import ru.abramov.practicum.bank.common.model.AccountStatus;
-import ru.abramov.practicum.bank.common.model.Currency;
+import ru.abramov.practicum.bank.service.account.model.AccountStatus;
+import ru.abramov.practicum.bank.service.account.model.Currency;
 
 import java.math.BigDecimal;
 

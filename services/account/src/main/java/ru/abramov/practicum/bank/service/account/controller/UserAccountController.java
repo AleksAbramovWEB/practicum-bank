@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.abramov.practicum.bank.common.annotation.CurrentUser;
-import ru.abramov.practicum.bank.common.dto.AccountDto;
+import ru.abramov.practicum.bank.service.account.dto.AccountDto;
 import ru.abramov.practicum.bank.common.model.User;
 import ru.abramov.practicum.bank.service.account.service.UserAccountService;
 

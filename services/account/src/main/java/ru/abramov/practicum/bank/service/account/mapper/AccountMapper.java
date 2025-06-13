@@ -3,7 +3,7 @@ package ru.abramov.practicum.bank.service.account.mapper;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.abramov.practicum.bank.common.dto.AccountDto;
+import ru.abramov.practicum.bank.service.account.dto.AccountDto;
 import ru.abramov.practicum.bank.service.account.model.Account;
 
 @Mapper(componentModel = "spring")

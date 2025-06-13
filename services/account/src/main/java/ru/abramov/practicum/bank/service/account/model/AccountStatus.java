@@ -1,4 +1,4 @@
-package ru.abramov.practicum.bank.common.model;
+package ru.abramov.practicum.bank.service.account.model;
 
 import lombok.Getter;
 

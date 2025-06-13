@@ -1,5 +1,6 @@
 package ru.abramov.practicum.bank.client.account.model;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,7 +32,7 @@ public class AccountDto {
 
   private @Nullable String userId;
 
-  private @Nullable Double balance;
+  private @Nullable BigDecimal balance;
 
   private @Nullable AccountStatus status;
 
@@ -97,7 +98,7 @@ public class AccountDto {
     this.userId = userId;
   }
 
-  public AccountDto balance(Double balance) {
+  public AccountDto balance(BigDecimal balance) {
     this.balance = balance;
     return this;
   }
@@ -109,11 +110,11 @@ public class AccountDto {
   
   @Schema(name = "balance", example = "15000.75", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("balance")
-  public Double getBalance() {
+  public BigDecimal getBalance() {
     return balance;
   }
 
-  public void setBalance(Double balance) {
+  public void setBalance(BigDecimal balance) {
     this.balance = balance;
   }
 

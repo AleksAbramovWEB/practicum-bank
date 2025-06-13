@@ -11,7 +11,6 @@ import ru.abramov.practicum.bank.ui.dto.UserFormDto;
 import ru.abramov.practicum.bank.common.annotation.CurrentUser;
 import ru.abramov.practicum.bank.common.model.User;
 
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,9 +25,8 @@ public class HomeController {
         model.addAttribute("userFrom", UserFormDto.of(user));
         model.addAttribute("passwordFrom", new PasswordUserFormDto());
 
-        List<AccountDto> accounts = accountApi.getAccounts();
-
-        model.addAttribute("accounts", accounts);
+        model.addAttribute("accounts", accountApi.getAccounts());
+        model.addAttribute("account", new AccountDto());
 
         return "home";
     }

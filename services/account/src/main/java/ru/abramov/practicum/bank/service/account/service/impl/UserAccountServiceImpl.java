@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.abramov.practicum.bank.common.dto.AccountDto;
+import ru.abramov.practicum.bank.service.account.dto.AccountDto;
 import ru.abramov.practicum.bank.common.exception.BadRequestException;
 import ru.abramov.practicum.bank.common.exception.NotFoundException;
 import ru.abramov.practicum.bank.common.model.User;

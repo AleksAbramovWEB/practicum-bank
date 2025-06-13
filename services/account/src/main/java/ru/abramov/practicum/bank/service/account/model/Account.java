@@ -5,8 +5,6 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.AbstractPersistable;
-import ru.abramov.practicum.bank.common.model.AccountStatus;
-import ru.abramov.practicum.bank.common.model.Currency;
 
 import java.math.BigDecimal;
 import java.time.Instant;

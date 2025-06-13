@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class AccountFeignSecurityConfig {
+public class FeignSecurityConfig {
 
     private final OAuth2AuthorizedClientManager authorizedClientManager;
 

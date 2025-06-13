@@ -20,7 +20,7 @@ public class AccountClientConfiguration {
 
     @Bean
     public AccountApi accountApiClient(Feign.Builder feignBuilder,
-                                       AccountFeignSecurityConfig authConfig,
+                                       FeignSecurityConfig authConfig,
                                        @Value("${api.account}") String baseUrl) {
 
         return feignBuilder
