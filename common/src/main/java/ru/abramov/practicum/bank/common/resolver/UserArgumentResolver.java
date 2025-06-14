@@ -36,16 +36,16 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             return null;
         }
 
+        if (authentication.getPrincipal() instanceof Jwt principal) {
+            return mapToUser(principal.getClaims());
+        }
+
         if (authentication.getPrincipal() instanceof OAuth2User principal) {
             return mapToUser(principal.getAttributes());
         }
 
         if (authentication.getPrincipal() instanceof DefaultOidcUser principal) {
             return mapToUser(principal.getAttributes());
-        }
-
-        if (authentication.getPrincipal() instanceof Jwt principal) {
-            return mapToUser(principal.getClaims());
         }
 
 
