@@ -1,11 +1,18 @@
 package ru.abramov.practicum.bank.service.cash.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import ru.abramov.practicum.bank.client.account.api.AccountApi;
 import ru.abramov.practicum.bank.client.account.model.AccountDto;
 import ru.abramov.practicum.bank.client.account.model.ChangeBalanceDto;
+import ru.abramov.practicum.bank.client.blocker.api.BlockerApi;
+import ru.abramov.practicum.bank.client.blocker.model.CashCheckDto;
+import ru.abramov.practicum.bank.client.blocker.model.ResultCheckDto;
 import ru.abramov.practicum.bank.common.exception.BadRequestException;
 import ru.abramov.practicum.bank.common.model.User;
 import ru.abramov.practicum.bank.service.cash.dto.CashTransactionDto;
@@ -16,14 +23,21 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CashServiceImpl implements CashService {
 
     private final AccountApi accountApi;
+    private final BlockerApi blockerApi;
 
     @Override
+    @Retryable(
+            include = { RuntimeException.class },
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 500)
+    )
     public void putCash(CashTransactionDto transactionDto, User user) {
 
-        AccountDto accountDto = getAccountByNumber(transactionDto.getAccountNumber(), user);
+        AccountDto accountDto = getAccountByNumber(transactionDto, user);
 
         ChangeBalanceDto changeBalanceDto = new ChangeBalanceDto();
 
@@ -38,8 +52,13 @@ public class CashServiceImpl implements CashService {
     }
 
     @Override
+    @Retryable(
+            include = { RuntimeException.class },
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 500)
+    )
     public void withdrawCash(CashTransactionDto transactionDto, User user) {
-        AccountDto accountDto = getAccountByNumber(transactionDto.getAccountNumber(), user);
+        AccountDto accountDto = getAccountByNumber(transactionDto, user);
 
         BigDecimal result = accountDto.getBalance().subtract(transactionDto.getAmount());
 
@@ -55,13 +74,37 @@ public class CashServiceImpl implements CashService {
         accountApi.changeBalance(accountDto.getId(), changeBalanceDto);
     }
 
-    private AccountDto getAccountByNumber(String accountNumber, User user) {
-        AccountDto accountDto = accountApi.getAccountByNumber(accountNumber);
+    @Recover
+    public void recover(RuntimeException ex, CashTransactionDto transactionDto, User user) {
+        log.error("Transfer permanently failed after retries: account={}, to={}, user={}",
+                transactionDto.getAccountNumber(),
+                ex.getMessage(),
+                user
+        );
+
+        throw new IllegalStateException("Transfer failed and was rolled back. Manual intervention required.", ex);
+    }
+
+    private AccountDto getAccountByNumber(CashTransactionDto transactionDto, User user) {
+        AccountDto accountDto = accountApi.getAccountByNumber(transactionDto.getAccountNumber());
 
         if (!Objects.equals(accountDto.getUserId(), user.getId())) {
             throw new AccessDeniedException("User is not owner of account %s".formatted(accountDto.getUserId()));
         }
+        if (!check(transactionDto)) {
+            throw new AccessDeniedException("Operation blocked");
+        }
 
         return accountDto;
+    }
+
+    private Boolean check(CashTransactionDto transactionDto) {
+        CashCheckDto cashCheckDto = new CashCheckDto();
+        cashCheckDto.setAccountNumber(transactionDto.getAccountNumber());
+        cashCheckDto.setAmount(transactionDto.getAmount());
+
+        ResultCheckDto resultCheckDto = blockerApi.checkCash(cashCheckDto);
+
+        return resultCheckDto.getResult();
     }
 }

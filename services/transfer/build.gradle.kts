@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":clients:account"))
     implementation(project(":clients:exchange"))
+    implementation(project(":clients:blocker"))
 }
 
 openApiGenerate {

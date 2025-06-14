@@ -8,8 +8,12 @@ dependencies {
     implementation("org.springframework.security:spring-security-oauth2-jose")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
+    implementation("org.springframework.retry:spring-retry")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+
     implementation(project(":common"))
     implementation(project(":clients:account"))
+    implementation(project(":clients:blocker"))
 }
 
 openApiGenerate {

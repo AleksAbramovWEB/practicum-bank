@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import ru.abramov.practicum.bank.client.account.api.AccountApi;
 import ru.abramov.practicum.bank.client.account.model.AccountDto;
 import ru.abramov.practicum.bank.client.account.model.ChangeBalanceDto;
+import ru.abramov.practicum.bank.client.blocker.api.BlockerApi;
+import ru.abramov.practicum.bank.client.blocker.model.ResultCheckDto;
+import ru.abramov.practicum.bank.client.blocker.model.TransferCheckDto;
 import ru.abramov.practicum.bank.client.exchange.api.ExchangeApi;
 import ru.abramov.practicum.bank.client.exchange.model.ConvertRequestDto;
 import ru.abramov.practicum.bank.client.exchange.model.ConvertResponseDto;
@@ -27,11 +30,12 @@ public class TransferServiceImpl implements TransferService {
 
     private final AccountApi accountApi;
     private final ExchangeApi exchangeApi;
+    private final BlockerApi blockerApi;
 
     @Override
     @Retryable(
             include = { RuntimeException.class },
-            maxAttempts = 4,
+            maxAttempts = 3,
             backoff = @Backoff(delay = 500)
     )
     public void transfer(TransferDto transferDto, User user) {
@@ -42,6 +46,9 @@ public class TransferServiceImpl implements TransferService {
         }
         if (accountFrom.getBalance().compareTo(transferDto.getAmount()) < 0) {
             throw new IllegalStateException("Insufficient funds on the account: " + transferDto.getFromAccount());
+        }
+        if (!check(transferDto)) {
+            throw new AccessDeniedException("Operation blocked");
         }
 
         AccountDto accountTo = accountApi.getAccountByNumber(transferDto.getToAccount());
@@ -80,16 +87,29 @@ public class TransferServiceImpl implements TransferService {
 
     @Recover
     public void recover(RuntimeException ex, TransferDto transferDto, User user) {
-        log.error("Transfer permanently failed after retries: from={}, to={}, reason={}",
+        log.error("Transfer permanently failed after retries: from={}, to={}, reason={}, user={}",
                 transferDto.getFromAccount(),
                 transferDto.getToAccount(),
-                ex.getMessage());
+                ex.getMessage(),
+                user
+        );
 
         throw new IllegalStateException("Transfer failed and was rolled back. Manual intervention required.", ex);
     }
 
     private Currency mapCurrency(ru.abramov.practicum.bank.client.account.model.Currency currency) {
         return Currency.valueOf(currency.name());
+    }
+
+    private Boolean check(TransferDto transferDto) {
+        TransferCheckDto transferCheckDto = new TransferCheckDto();
+        transferCheckDto.setFromAccount(transferDto.getFromAccount());
+        transferCheckDto.setToAccount(transferDto.getToAccount());
+        transferCheckDto.setAmount(transferDto.getAmount());
+
+        ResultCheckDto resultCheckDto = blockerApi.checkTransfer(transferCheckDto);
+
+        return resultCheckDto.getResult();
     }
 }
 
