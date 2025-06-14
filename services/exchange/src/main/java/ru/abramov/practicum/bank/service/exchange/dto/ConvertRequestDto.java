@@ -16,5 +16,5 @@ public class ConvertRequestDto {
     private Currency toCurrency;
 
     @NotNull
-    private BigDecimal sum;
+    private BigDecimal amount;
 }

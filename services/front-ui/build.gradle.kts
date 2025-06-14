@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":clients:account"))
     implementation(project(":clients:cash"))
+    implementation(project(":clients:transfer"))
 }
 
 tasks.jar {

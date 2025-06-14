@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.abramov.practicum.bank.ui.config.KeycloakAdminProperty;
 import ru.abramov.practicum.bank.ui.dto.PasswordUserFormDto;
 import ru.abramov.practicum.bank.ui.dto.UserFormDto;
+import ru.abramov.practicum.bank.ui.dto.UserItemDto;
 import ru.abramov.practicum.bank.ui.service.UserService;
 import ru.abramov.practicum.bank.common.model.User;
 
@@ -55,5 +56,30 @@ public class UserServiceImpl implements UserService {
         newPassword.setTemporary(false);
 
         userResource.resetPassword(newPassword);
+    }
+
+    @Override
+    public List<UserItemDto> getAllOverUsers(User user) {
+        int first = 0;
+        int max = 100;
+        List<UserRepresentation> allUsers = new java.util.ArrayList<>();
+
+        while (true) {
+            List<UserRepresentation> users = keycloak.realm(keycloakAdminProperty.getRealm())
+                    .users()
+                    .list(first, max);
+
+            if (users.isEmpty()) {
+                break;
+            }
+
+            allUsers.addAll(users);
+            first += max;
+        }
+
+        return allUsers.stream()
+                .map(UserItemDto::of)
+                .filter(item -> !item.getId().equals(user.getId()))
+                .toList();
     }
 }

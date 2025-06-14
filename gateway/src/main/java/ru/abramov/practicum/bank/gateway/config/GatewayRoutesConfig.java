@@ -37,7 +37,7 @@ public class GatewayRoutesConfig {
             String targetUri = instance.getUri().toString();
 
             if (serviceName.equals("frontend-ui")) {
-                List<String> uiPaths = List.of("/", "/user/**", "/login/oauth2/code/**", "/oauth2/**", "/account", "/account/**", "/cash/**");
+                List<String> uiPaths = List.of("/", "/user/**", "/login/oauth2/code/**", "/oauth2/**", "/account", "/account/**", "/cash/**", "/transfer");
                 for (String path : uiPaths) {
                     routes.route("route-" + serviceName + "-" + path.replaceAll("[^a-zA-Z0-9]", "-"), r -> r
                             .path(path)

@@ -28,7 +28,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     public ConvertResponseDto convert(ConvertRequestDto convertRequestDto) {
         Currency from = convertRequestDto.getFromCurrency();
         Currency to = convertRequestDto.getToCurrency();
-        BigDecimal amount = convertRequestDto.getSum();
+        BigDecimal amount = convertRequestDto.getAmount();
 
         if (from.equals(to)) {
             return new ConvertResponseDto(amount);
