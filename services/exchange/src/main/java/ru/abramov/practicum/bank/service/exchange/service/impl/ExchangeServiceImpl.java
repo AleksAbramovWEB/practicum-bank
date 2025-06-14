@@ -64,6 +64,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     public List<RateDto> rates() {
         return exchangeRateRepository.findAll()
                 .stream()
+                .filter(exchange -> !exchange.getCurrency().equals(base))
                 .map(RateDto::of)
                 .toList();
     }

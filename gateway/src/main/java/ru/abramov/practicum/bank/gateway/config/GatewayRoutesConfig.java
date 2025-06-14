@@ -28,6 +28,7 @@ public class GatewayRoutesConfig {
         for (String serviceName : services) {
             if (serviceName.equalsIgnoreCase("gateway")) continue;
             if (serviceName.equalsIgnoreCase("config")) continue;
+            if (serviceName.equalsIgnoreCase("exchange-generator")) continue;
 
             List<ServiceInstance> instances = discoveryClient.getInstances(serviceName);
             if (instances.isEmpty()) continue;
