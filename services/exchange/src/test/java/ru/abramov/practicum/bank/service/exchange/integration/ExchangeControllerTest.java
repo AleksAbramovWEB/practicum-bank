@@ -1,16 +1,7 @@
 package ru.abramov.practicum.bank.service.exchange.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import ru.abramov.practicum.bank.service.exchange.config.JwtTestConfig;
 import ru.abramov.practicum.bank.service.exchange.dto.ConvertRequestDto;
 import ru.abramov.practicum.bank.service.exchange.dto.RateDto;
 import ru.abramov.practicum.bank.service.exchange.model.Currency;
@@ -20,20 +11,8 @@ import java.math.BigDecimal;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@Import(JwtTestConfig.class)
-class ExchangeControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+class ExchangeControllerTest extends AbstractIntegrationTest {
 
     private static final String AUTH_HEADER = "Authorization";
     private static final String BEARER_TOKEN = "Bearer mock.jwt.token";
