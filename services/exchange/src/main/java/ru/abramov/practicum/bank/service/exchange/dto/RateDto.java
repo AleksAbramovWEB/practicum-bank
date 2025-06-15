@@ -1,13 +1,17 @@
 package ru.abramov.practicum.bank.service.exchange.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.abramov.practicum.bank.service.exchange.model.Currency;
 import ru.abramov.practicum.bank.service.exchange.model.ExchangeRate;
 
 import java.math.BigDecimal;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RateDto {
 
     @NotNull

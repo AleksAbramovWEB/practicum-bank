@@ -8,6 +8,7 @@ dependencies {
 
     implementation("org.keycloak:keycloak-admin-client:26.0.5")
 
+    testImplementation("org.springframework.security:spring-security-test")
 
     implementation(project(":common"))
     implementation(project(":clients:account"))
