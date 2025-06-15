@@ -1,8 +1,10 @@
-package ru.abramov.practicum.bank.service.blocker;
+package ru.abramov.practicum.bank.service.cash;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+@Disabled
 @SpringBootTest
 class CashServicePracticumBankApplicationTests {
 

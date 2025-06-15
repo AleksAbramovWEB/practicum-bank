@@ -1,6 +1,5 @@
 package ru.abramov.practicum.bank.service.account.mapper;
 
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.abramov.practicum.bank.service.account.dto.AccountDto;
@@ -11,7 +10,4 @@ public interface AccountMapper {
 
     @Mapping(target = "id", source = "id")
     AccountDto toDto(Account account);
-
-    @InheritInverseConfiguration
-    Account toEntity(AccountDto dto);
 }

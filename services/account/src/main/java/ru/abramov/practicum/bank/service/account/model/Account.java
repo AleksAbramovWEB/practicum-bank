@@ -48,4 +48,8 @@ public class Account extends AbstractPersistable<Long> {
 
     @UpdateTimestamp
     private Instant updated;
+
+    public void setTestId(Long id) {
+        this.setId(id);
+    }
 }
