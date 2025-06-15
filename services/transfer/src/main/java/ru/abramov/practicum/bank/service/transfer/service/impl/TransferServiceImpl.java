@@ -7,13 +7,13 @@ import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-import ru.abramov.practicum.bank.client.account.api.AccountApi;
+import ru.abramov.practicum.bank.client.account.api.AccountClient;
 import ru.abramov.practicum.bank.client.account.model.AccountDto;
 import ru.abramov.practicum.bank.client.account.model.ChangeBalanceDto;
-import ru.abramov.practicum.bank.client.blocker.api.BlockerApi;
+import ru.abramov.practicum.bank.client.blocker.api.BlockerClient;
 import ru.abramov.practicum.bank.client.blocker.model.ResultCheckDto;
 import ru.abramov.practicum.bank.client.blocker.model.TransferCheckDto;
-import ru.abramov.practicum.bank.client.exchange.api.ExchangeApi;
+import ru.abramov.practicum.bank.client.exchange.api.ExchangeClient;
 import ru.abramov.practicum.bank.client.exchange.model.ConvertRequestDto;
 import ru.abramov.practicum.bank.client.exchange.model.ConvertResponseDto;
 import ru.abramov.practicum.bank.client.exchange.model.Currency;
@@ -28,9 +28,9 @@ import java.util.Objects;
 @Slf4j
 public class TransferServiceImpl implements TransferService {
 
-    private final AccountApi accountApi;
-    private final ExchangeApi exchangeApi;
-    private final BlockerApi blockerApi;
+    private final AccountClient accountClient;
+    private final ExchangeClient exchangeClient;
+    private final BlockerClient blockerClient;
 
     @Override
     @Retryable(
@@ -40,7 +40,7 @@ public class TransferServiceImpl implements TransferService {
     )
     public void transfer(TransferDto transferDto, User user) {
 
-        AccountDto accountFrom = accountApi.getAccountByNumber(transferDto.getFromAccount());
+        AccountDto accountFrom = accountClient.getAccountByNumber(transferDto.getFromAccount());
         if (!Objects.equals(accountFrom.getUserId(), user.getId())) {
             throw new AccessDeniedException("Only the owner can write off from this account");
         }
@@ -51,35 +51,35 @@ public class TransferServiceImpl implements TransferService {
             throw new AccessDeniedException("Operation blocked");
         }
 
-        AccountDto accountTo = accountApi.getAccountByNumber(transferDto.getToAccount());
+        AccountDto accountTo = accountClient.getAccountByNumber(transferDto.getToAccount());
 
         ConvertRequestDto convertRequest = new ConvertRequestDto();
         convertRequest.setAmount(transferDto.getAmount());
         convertRequest.setFromCurrency(mapCurrency(accountFrom.getCurrency()));
         convertRequest.setToCurrency(mapCurrency(accountTo.getCurrency()));
-        ConvertResponseDto converted = exchangeApi.convertCurrency(convertRequest);
+        ConvertResponseDto converted = exchangeClient.convertCurrency(convertRequest);
 
         ChangeBalanceDto fromChange = new ChangeBalanceDto();
         fromChange.setAmount(accountFrom.getBalance().subtract(transferDto.getAmount()));
         fromChange.setVersion(accountFrom.getVersion());
 
-        accountApi.changeBalance(accountFrom.getId(), fromChange);
+        accountClient.changeBalance(accountFrom.getId(), fromChange);
 
         try {
             ChangeBalanceDto toChange = new ChangeBalanceDto();
             toChange.setAmount(accountTo.getBalance().add(converted.getResult()));
             toChange.setVersion(accountTo.getVersion());
 
-            accountApi.changeBalance(accountTo.getId(), toChange);
+            accountClient.changeBalance(accountTo.getId(), toChange);
 
         } catch (RuntimeException ex) {
-            AccountDto updatedFrom = accountApi.getAccountByNumber(transferDto.getFromAccount());
+            AccountDto updatedFrom = accountClient.getAccountByNumber(transferDto.getFromAccount());
 
             ChangeBalanceDto compensation = new ChangeBalanceDto();
             compensation.setAmount(updatedFrom.getBalance().add(transferDto.getAmount()));
             compensation.setVersion(updatedFrom.getVersion());
 
-            accountApi.changeBalance(updatedFrom.getId(), compensation);
+            accountClient.changeBalance(updatedFrom.getId(), compensation);
 
             throw new RuntimeException("Failed to credit account. Rolled back.", ex);
         }
@@ -107,7 +107,7 @@ public class TransferServiceImpl implements TransferService {
         transferCheckDto.setToAccount(transferDto.getToAccount());
         transferCheckDto.setAmount(transferDto.getAmount());
 
-        ResultCheckDto resultCheckDto = blockerApi.checkTransfer(transferCheckDto);
+        ResultCheckDto resultCheckDto = blockerClient.checkTransfer(transferCheckDto);
 
         return resultCheckDto.getResult();
     }

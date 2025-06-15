@@ -2,11 +2,8 @@ package ru.abramov.practicum.bank.service.cash.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Recover;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import ru.abramov.practicum.bank.client.notification.api.NotificationApi;
+import ru.abramov.practicum.bank.client.notification.api.NotificationClient;
 import ru.abramov.practicum.bank.client.notification.model.MailDto;
 import ru.abramov.practicum.bank.common.model.User;
 import ru.abramov.practicum.bank.service.cash.dto.CashTransactionDto;
@@ -17,14 +14,9 @@ import ru.abramov.practicum.bank.service.cash.service.NotificationService;
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
-    private final NotificationApi notificationApi;
+    private final NotificationClient notificationClient;
 
     @Override
-    @Retryable(
-            include = { RuntimeException.class },
-            maxAttempts = 2,
-            backoff = @Backoff(delay = 100)
-    )
     public void notifyPutCash(CashTransactionDto transferDto, User user) {
         MailDto mailDto = new MailDto();
 
@@ -32,33 +24,17 @@ public class NotificationServiceImpl implements NotificationService {
         mailDto.setSubject("Пополнение исполнено");
         mailDto.setText("Пополнение счета %s исполнено".formatted(transferDto.getAccountNumber()));
 
-        notificationApi.sendMail(mailDto);
+        notificationClient.sendMail(mailDto);
     }
 
     @Override
-    @Retryable(
-            include = { RuntimeException.class },
-            maxAttempts = 2,
-            backoff = @Backoff(delay = 100)
-    )
     public void notifyWithdrawCash(CashTransactionDto transferDto, User user) {
         MailDto mailDto = new MailDto();
 
         mailDto.setEmail(user.getEmail());
-        mailDto.setSubject("Вывод средств исполнено");
+        mailDto.setSubject("Вывод средств исполнен");
         mailDto.setText("Вывод средств исполнено со счета %s".formatted(transferDto.getAccountNumber()));
 
-        notificationApi.sendMail(mailDto);
-    }
-
-    @Recover
-    public void recover(RuntimeException ex, CashTransactionDto transferDto, User user) {
-        log.error("Notify failed after retries: account={}, reason={}, user={}",
-                transferDto.getAccountNumber(),
-                ex.getMessage(),
-                user
-        );
-
-        throw new IllegalStateException("Notify failed. Manual intervention required.", ex);
+        notificationClient.sendMail(mailDto);
     }
 }

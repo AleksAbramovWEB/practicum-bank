@@ -10,7 +10,7 @@ import ru.abramov.practicum.bank.client.exchange.api.ExchangeApi;
 public class ExchangeClientConfiguration {
 
     @Bean
-    public ExchangeApi accountApiClient(Feign.Builder feignBuilder,
+    public ExchangeApi exchangeApiClient(Feign.Builder feignBuilder,
                                         FeignSecurityConfig authConfig,
                                         @Value("${api.exchange}") String baseUrl) {
 

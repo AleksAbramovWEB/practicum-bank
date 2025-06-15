@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.abramov.practicum.bank.client.cash.api.CashApi;
+import ru.abramov.practicum.bank.client.cash.api.CashClient;
 import ru.abramov.practicum.bank.client.cash.model.CashTransactionDto;
 
 @Controller
@@ -16,7 +16,7 @@ import ru.abramov.practicum.bank.client.cash.model.CashTransactionDto;
 @RequiredArgsConstructor
 public class CashController {
 
-    private final CashApi cashApi;
+    private final CashClient cashClient;
 
     @PostMapping("/put")
     public String putCash(@Valid @ModelAttribute("cashTransaction") CashTransactionDto cashTransactionDto, BindingResult result,
@@ -27,7 +27,7 @@ public class CashController {
             return "error";
         }
 
-        cashApi.putCash(cashTransactionDto);
+        cashClient.putCash(cashTransactionDto);
 
         return "redirect:/";
     }
@@ -41,7 +41,7 @@ public class CashController {
             return "error";
         }
 
-        cashApi.withdrawCash(cashTransactionDto);
+        cashClient.withdrawCash(cashTransactionDto);
 
         return "redirect:/";
     }

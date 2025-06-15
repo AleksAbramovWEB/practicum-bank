@@ -7,10 +7,10 @@ import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-import ru.abramov.practicum.bank.client.account.api.AccountApi;
+import ru.abramov.practicum.bank.client.account.api.AccountClient;
 import ru.abramov.practicum.bank.client.account.model.AccountDto;
 import ru.abramov.practicum.bank.client.account.model.ChangeBalanceDto;
-import ru.abramov.practicum.bank.client.blocker.api.BlockerApi;
+import ru.abramov.practicum.bank.client.blocker.api.BlockerClient;
 import ru.abramov.practicum.bank.client.blocker.model.CashCheckDto;
 import ru.abramov.practicum.bank.client.blocker.model.ResultCheckDto;
 import ru.abramov.practicum.bank.common.exception.BadRequestException;
@@ -26,8 +26,8 @@ import java.util.Objects;
 @Slf4j
 public class CashServiceImpl implements CashService {
 
-    private final AccountApi accountApi;
-    private final BlockerApi blockerApi;
+    private final AccountClient accountClient;
+    private final BlockerClient blockerClient;
 
     @Override
     @Retryable(
@@ -48,7 +48,7 @@ public class CashServiceImpl implements CashService {
 
         changeBalanceDto.setVersion(accountDto.getVersion());
 
-        accountApi.changeBalance(accountDto.getId(), changeBalanceDto);
+        accountClient.changeBalance(accountDto.getId(), changeBalanceDto);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CashServiceImpl implements CashService {
         changeBalanceDto.setAmount(result);
         changeBalanceDto.setVersion(accountDto.getVersion());
 
-        accountApi.changeBalance(accountDto.getId(), changeBalanceDto);
+        accountClient.changeBalance(accountDto.getId(), changeBalanceDto);
     }
 
     @Recover
@@ -86,7 +86,7 @@ public class CashServiceImpl implements CashService {
     }
 
     private AccountDto getAccountByNumber(CashTransactionDto transactionDto, User user) {
-        AccountDto accountDto = accountApi.getAccountByNumber(transactionDto.getAccountNumber());
+        AccountDto accountDto = accountClient.getAccountByNumber(transactionDto.getAccountNumber());
 
         if (!Objects.equals(accountDto.getUserId(), user.getId())) {
             throw new AccessDeniedException("User is not owner of account %s".formatted(accountDto.getUserId()));
@@ -103,7 +103,7 @@ public class CashServiceImpl implements CashService {
         cashCheckDto.setAccountNumber(transactionDto.getAccountNumber());
         cashCheckDto.setAmount(transactionDto.getAmount());
 
-        ResultCheckDto resultCheckDto = blockerApi.checkCash(cashCheckDto);
+        ResultCheckDto resultCheckDto = blockerClient.checkCash(cashCheckDto);
 
         return resultCheckDto.getResult();
     }

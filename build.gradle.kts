@@ -49,12 +49,17 @@ subprojects {
         compileOnly("org.projectlombok:lombok")
         developmentOnly("org.springframework.boot:spring-boot-devtools")
         annotationProcessor("org.projectlombok:lombok")
+
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
         implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
         implementation("io.github.openfeign:feign-httpclient")
-
+        implementation("io.github.resilience4j:resilience4j-all")
+        implementation("io.github.resilience4j:resilience4j-circuitbreaker")
+        implementation("io.github.resilience4j:resilience4j-timelimiter")
+        implementation("io.github.resilience4j:resilience4j-retry")
+        implementation("io.github.resilience4j:resilience4j-spring-boot3")
 
         implementation("io.github.openfeign:feign-jackson")
         implementation("io.swagger.core.v3:swagger-annotations:2.2.31")

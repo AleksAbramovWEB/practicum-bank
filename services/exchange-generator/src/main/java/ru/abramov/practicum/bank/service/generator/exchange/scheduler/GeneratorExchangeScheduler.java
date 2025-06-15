@@ -3,7 +3,7 @@ package ru.abramov.practicum.bank.service.generator.exchange.scheduler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.abramov.practicum.bank.client.exchange.api.ExchangeApi;
+import ru.abramov.practicum.bank.client.exchange.api.ExchangeClient;
 import ru.abramov.practicum.bank.client.exchange.model.Currency;
 import ru.abramov.practicum.bank.client.exchange.model.RateDto;
 
@@ -15,7 +15,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class GeneratorExchangeScheduler {
 
-    private final ExchangeApi exchangeApi;
+    private final ExchangeClient exchangeClient;
 
     private final Random random = new Random();
 
@@ -27,7 +27,7 @@ public class GeneratorExchangeScheduler {
             rateDto.setCurrency(currency);
             rateDto.setValue(generateRandomRate(currency));
 
-            exchangeApi.updateExchangeRate(rateDto);
+            exchangeClient.updateExchangeRate(rateDto);
         }
     }
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.abramov.practicum.bank.client.account.api.AccountApi;
+import ru.abramov.practicum.bank.client.account.api.AccountClient;
 import ru.abramov.practicum.bank.client.account.model.AccountDto;
 import ru.abramov.practicum.bank.client.account.model.OpenAccountDto;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final AccountApi accountApi;
+    private final AccountClient accountClient;
 
     @PostMapping
     public String addAccount(@Valid @ModelAttribute("account") OpenAccountDto openAccountDto,
@@ -30,19 +30,19 @@ public class AccountController {
             return "error";
         }
 
-        accountApi.addAccount(openAccountDto);
+        accountClient.addAccount(openAccountDto);
 
         return "redirect:/";
     }
 
     @PostMapping("/delete/{id}")
     public String deleteAccount(@PathVariable Long id) {
-        accountApi.deleteAccount(id);
+        accountClient.deleteAccount(id);
         return "redirect:/";
     }
 
     @GetMapping("/account/user/{userId}")
     public ResponseEntity<List<AccountDto>> getAccounts(@PathVariable String userId) {
-        return ResponseEntity.ok(accountApi.getAccountsByUserId(userId));
+        return ResponseEntity.ok(accountClient.getAccountsByUserId(userId));
     }
 }
