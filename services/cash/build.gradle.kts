@@ -1,3 +1,7 @@
+plugins {
+    id("org.springframework.cloud.contract") version "4.1.3"
+    id("maven-publish")
+}
 
 dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
@@ -11,11 +15,36 @@ dependencies {
     implementation("org.springframework.retry:spring-retry")
     implementation("org.springframework.boot:spring-boot-starter-aop")
 
+    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
+    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
+
     implementation(project(":common"))
     implementation(project(":clients:account"))
     implementation(project(":clients:blocker"))
     implementation(project(":clients:notification"))
 }
+
+contracts {
+    contractsDslDir.set(file("$rootDir/services/cash/src/test/resources/contracts"))
+    baseClassForTests.set("ru.abramov.practicum.bank.service.cash.contract.BaseContractTest")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("stubs") {
+            groupId = "ru.abramov.practicum.bank"
+            artifactId = "${project.name}-stubs"
+            version = "0.0.1-SNAPSHOT"
+
+            artifact(tasks.named("verifierStubsJar"))
+        }
+    }
+
+    repositories {
+        mavenLocal()
+    }
+}
+
 
 openApiGenerate {
     generatorName.set("spring")
