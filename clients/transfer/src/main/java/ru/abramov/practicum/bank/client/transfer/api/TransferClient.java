@@ -23,7 +23,7 @@ public class TransferClient {
                     return null;
                 },
                 () -> {
-                    log.warn("💸 Fallback: transfer from {} to {} failed",
+                    log.warn("Fallback: transfer from {} to {} failed",
                             transferDto.getFromAccount(), transferDto.getToAccount());
                     return null;
                 }

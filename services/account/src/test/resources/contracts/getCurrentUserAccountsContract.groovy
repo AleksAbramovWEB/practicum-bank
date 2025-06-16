@@ -16,5 +16,33 @@ Contract.make {
 
     response {
         status 200
+
+        headers {
+            contentType(applicationJson())
+        }
+
+        body([
+                $(consumer(
+                        [
+                                id      : anyNumber(),
+                                number  : anyNonBlankString(),
+                                userId  : anyNonBlankString(),
+                                balance : anyNumber(),
+                                status  : regex('ACTIVE|BLOCKED'),
+                                currency: regex('RUB|USD|EUR'),
+                                version : anyNumber()
+                        ]
+                ), producer(
+                        [
+                                id      : 1001,
+                                number  : "40817810000000000001",
+                                userId  : "user-456",
+                                balance : 5000.00,
+                                status  : "ACTIVE",
+                                currency: "RUB",
+                                version : 1
+                        ]
+                ))
+        ])
     }
 }

@@ -24,5 +24,15 @@ Contract.make {
         headers {
             contentType(applicationJson())
         }
+
+        body(
+                id      : anyNumber(),
+                number  : anyNonBlankString(),
+                userId  : anyNonBlankString(),
+                balance : anyNumber(),
+                status  : regex('ACTIVE|BLOCKED'),
+                currency: regex('RUB|USD|EUR'),
+                version : anyNumber()
+        )
     }
 }

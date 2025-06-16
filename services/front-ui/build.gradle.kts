@@ -10,6 +10,8 @@ dependencies {
 
     testImplementation("org.springframework.security:spring-security-test")
 
+    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
+
     implementation(project(":common"))
     implementation(project(":clients:account"))
     implementation(project(":clients:cash"))

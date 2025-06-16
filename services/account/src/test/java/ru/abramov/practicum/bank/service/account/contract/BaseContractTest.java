@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.context.WebApplicationContext;
+import ru.abramov.practicum.bank.common.model.User;
 import ru.abramov.practicum.bank.service.account.AccountServicePracticumBankApplication;
 import ru.abramov.practicum.bank.service.account.model.AccountStatus;
 import ru.abramov.practicum.bank.service.account.model.Currency;
@@ -63,62 +64,56 @@ public abstract class BaseContractTest {
         public AccountService accountService() {
             AccountService mock = mock(AccountServiceImpl.class);
 
-            doNothing().when(mock).blockAccount(1234L);
+            AccountDto account1001 = AccountDto.builder()
+                    .id(1001L)
+                    .number("40817810000000000001")
+                    .userId("user-456")
+                    .balance(BigDecimal.valueOf(5000.00))
+                    .status(AccountStatus.ACTIVE)
+                    .currency(Currency.RUB)
+                    .version(1L)
+                    .build();
 
-            doNothing().when(mock).changeBalance(eq(1234L), any(BigDecimal.class), eq(2L));
-
-            when(mock.getAccounts("user-456")).thenReturn(List.of(
-                    AccountDto.builder()
-                            .id(1002L)
-                            .number("40817810099910004322")
-                            .userId("user-456")
-                            .balance(BigDecimal.valueOf(5000.00))
-                            .status(AccountStatus.BLOCKED)
-                            .currency(Currency.USD)
-                            .version(3L)
-                            .build()
-            ));
-
-            when(mock.getAccounts("user-456")).thenReturn(List.of(
-                    AccountDto.builder()
-                            .id(1001L)
-                            .number("40817810099910004321")
-                            .userId("user-456")
-                            .balance(BigDecimal.valueOf(5000.00))
-                            .status(AccountStatus.ACTIVE)
-                            .currency(Currency.RUB)
-                            .version(5L)
-                            .build()
-            ));
+            AccountDto account1003 = AccountDto.builder()
+                    .id(1003L)
+                    .number("40817810000000000002")
+                    .userId("user-456")
+                    .balance(BigDecimal.valueOf(6000.00))
+                    .status(AccountStatus.BLOCKED)
+                    .currency(Currency.EUR)
+                    .version(2L)
+                    .build();
 
             when(mock.getAccount("40817810099910004321")).thenReturn(
                     AccountDto.builder()
-                            .id(1003L)
+                            .id(2001L)
                             .number("40817810099910004321")
                             .userId("user-456")
-                            .balance(BigDecimal.valueOf(5000.00))
+                            .balance(BigDecimal.valueOf(7000.00))
                             .status(AccountStatus.ACTIVE)
                             .currency(Currency.EUR)
-                            .version(7L)
+                            .version(3L)
                             .build()
             );
 
+            when(mock.openAccount(any(User.class), eq(Currency.RUB))).thenReturn(account1001);
 
-            when(mock.openAccount(any(), eq(Currency.RUB))).thenReturn(
-                    AccountDto.builder()
-                            .id(999L)
-                            .number("40817810000000000001")
-                            .userId("user-456")
-                            .balance(BigDecimal.valueOf(5000.00))
-                            .status(AccountStatus.ACTIVE)
-                            .currency(Currency.RUB)
-                            .version(1L)
-                            .build()
-            );
+            when(mock.getAccounts("user-456")).thenReturn(List.of(account1001));
 
-            doNothing().when(mock).deleteAccount(any(), eq(123L));
+
+            when(mock.getAccount("40817810000000000001")).thenReturn(account1001);
+
+            when(mock.getAccount("40817810000000000002")).thenReturn(account1003);
+
+            doNothing().when(mock).deleteAccount(any(User.class), anyLong());
+
+
+            doNothing().when(mock).blockAccount(anyLong());
+
+            doNothing().when(mock).changeBalance(anyLong(), any(BigDecimal.class), anyLong());
 
             return mock;
         }
+
     }
 }
