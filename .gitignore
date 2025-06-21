@@ -33,6 +33,11 @@ out/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
 /.env
+
+### k8s ###
+/k8s/charts/postgres/secret-values-dev.yaml
+/k8s/charts/postgres/secret-values-prod.yaml
+/k8s/charts/postgres/secret-values-test.yaml
+/k8s/charts/account/secret-values-dev.yaml
+/k8s/charts/postgres/templates/init-configmap.yaml
