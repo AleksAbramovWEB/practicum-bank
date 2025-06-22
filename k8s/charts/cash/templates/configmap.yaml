@@ -3,8 +3,9 @@ kind: ConfigMap
 metadata:
   name: cash-config
 data:
-  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: "http://keycloak:8080/realms/bank"
-  API_ACCOUNT: "http://localhost:8082/api/account"
-  API_CASH: "http://localhost:8080/api/cash"
-  API_BLOCKER: "http://localhost:8080/api/blocker"
-  API_NOTIFICATION: "http://localhost:8080/api/notification"
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: {{ .Values.configMap.jwtIssuerUri | quote}}
+  API_ACCOUNT: {{ .Values.configMap.api.account | quote}}
+  API_CASH: {{ .Values.configMap.api.cash | quote}}
+  API_BLOCKER: {{ .Values.configMap.api.blocker | quote}}
+  API_NOTIFICATION: {{ .Values.configMap.api.notification | quote}}
+  SERVER_PORT: {{ .Values.service.port | quote }}

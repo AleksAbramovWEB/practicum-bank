@@ -10,3 +10,8 @@ persistence:
 service:
   type: ClusterIP
   port: 5432
+
+secrets:
+  db: ""
+  user: ""
+  password: ""

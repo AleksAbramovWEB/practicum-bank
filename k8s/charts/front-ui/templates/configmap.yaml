@@ -3,8 +3,9 @@ kind: ConfigMap
 metadata:
   name: front-ui-config
 data:
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI: "http://keycloak:8080/realms/bank"
-  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECT_URL: "http://localhost:8080/login/oauth2/code/{registrationId}"
-  API_ACCOUNT: "http://localhost:8080/api/account"
-  API_CASH: "http://localhost:8080/api/cash"
-  API_TRANSFER: "http://localhost:8080/api/transfer"
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI: {{ .Values.configMap.jwtIssuerUri | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECT_URL: {{ .Values.configMap.keycloakRedirectUrl | quote }}
+  API_ACCOUNT: {{ .Values.configMap.api.account | quote }}
+  API_CASH: {{ .Values.configMap.api.cash | quote }}
+  API_TRANSFER: {{ .Values.configMap.api.transfer | quote }}
+  SERVER_PORT: {{ .Values.service.port | quote }}

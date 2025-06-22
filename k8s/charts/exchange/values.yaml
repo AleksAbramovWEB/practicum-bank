@@ -12,4 +12,13 @@ service:
 env:
   JAVA_OPTS: "-Xms256m -Xmx512m"
 
+secrets:
+  db: ""
+  username: ""
+  password: ""
+
+configMap:
+  datasourceUrl: "jdbc:postgresql://postgres:5432/exchange"
+  jwtIssuerUri: "http://keycloak:8080/realms/bank"
+
 resources: {}

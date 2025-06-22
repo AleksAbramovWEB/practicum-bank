@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: blocker-config
 data:
-  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: "http://keycloak:8080/realms/bank"
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: {{ .Values.configMap.jwtIssuerUri | quote}}
+  SERVER_PORT: {{ .Values.service.port | quote }}

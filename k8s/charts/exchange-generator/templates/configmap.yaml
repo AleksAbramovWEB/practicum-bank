@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: exchange-generator-config
 data:
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URL: "http://keycloak:8080/realms/bank/protocol/openid-connect/token"
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URL: "http://keycloak:8080/realms/bank"
-  API_EXCHANGE: "http://localhost:8080/api/exchange"
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URL: {{ .Values.configMap.keycloakTokenUrl | quote}}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URL: {{ .Values.configMap.jwtIssuerUri | quote}}
+  API_EXCHANGE: {{ .Values.configMap.api.exchange | quote}}
+  SERVER_PORT: {{ .Values.service.port | quote }}

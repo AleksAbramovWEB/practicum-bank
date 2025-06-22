@@ -21,6 +21,11 @@ spec:
           env:
             - name: JAVA_OPTS
               value: "{{ .Values.env.JAVA_OPTS }}"
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: exchange-generator-config
+                  key: SERVER_PORT
             - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URL
               valueFrom:
                 configMapKeyRef:

@@ -26,3 +26,8 @@ spec:
                 configMapKeyRef:
                   name: blocker-config
                   key: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: blocker-config
+                  key: SERVER_PORT

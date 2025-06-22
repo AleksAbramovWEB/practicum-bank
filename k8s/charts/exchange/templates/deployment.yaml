@@ -41,3 +41,8 @@ spec:
                 configMapKeyRef:
                   name: exchange-config
                   key: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: exchange-config
+                  key: SERVER_PORT

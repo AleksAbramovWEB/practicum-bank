@@ -46,3 +46,6 @@ out/
 /k8s/charts/keycloak/secret-values-dev.yaml
 /k8s/charts/notification/secret-values-dev.yaml
 /k8s/charts/front-ui/secret-values-dev.yaml
+/k8s/umbrella/secret-values-dev.yaml
+/k8s/umbrella/secret-values-test.yaml
+/k8s/umbrella/secret-values-prod.yaml

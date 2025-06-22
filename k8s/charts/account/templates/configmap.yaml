@@ -3,5 +3,6 @@ kind: ConfigMap
 metadata:
   name: account-config
 data:
-  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/accounts"
-  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: "http://keycloak:8080/realms/bank"
+  SPRING_DATASOURCE_URL: {{ .Values.configMap.datasourceUrl | quote }}
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI:  {{ .Values.configMap.jwtIssuerUri | quote }}
+  SERVER_PORT: {{ .Values.service.port | quote }}

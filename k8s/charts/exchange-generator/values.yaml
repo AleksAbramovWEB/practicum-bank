@@ -9,6 +9,17 @@ service:
   type: ClusterIP
   port: 8085
 
+secrets:
+  oauth2:
+    clientId: ""
+    secret: ""
+
+configMap:
+  jwtIssuerUri: "http://keycloak:8080/realms/bank"
+  keycloakTokenUrl: "http://keycloak:8080/realms/bank/protocol/openid-connect/token"
+  api:
+    exchange: "http://localhost:8080/api/exchange"
+
 env:
   JAVA_OPTS: "-Xms256m -Xmx512m"
 

@@ -21,6 +21,11 @@ spec:
           env:
             - name: JAVA_OPTS
               value: "{{ .Values.env.JAVA_OPTS }}"
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: account-config
+                  key: SERVER_PORT
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 configMapKeyRef:
@@ -41,13 +46,3 @@ spec:
                 configMapKeyRef:
                   name: account-config
                   key: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-            - name: ACCOUNT_SERVICE_OAUTH2_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: account-secret
-                  key: ACCOUNT_SERVICE_OAUTH2_CLIENT_ID
-            - name: ACCOUNT_SERVICE_OAUTH2_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: account-secret
-                  key: ACCOUNT_SERVICE_OAUTH2_CLIENT_SECRET

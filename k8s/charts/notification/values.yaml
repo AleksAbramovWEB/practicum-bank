@@ -9,6 +9,16 @@ service:
   type: ClusterIP
   port: 8088
 
+secrets:
+  mail:
+    host: ""
+    port: ""
+    username: ""
+    password: ""
+
+configMap:
+  jwtIssuerUri: "http://keycloak:8080/realms/bank"
+
 env:
   JAVA_OPTS: "-Xms256m -Xmx512m"
 

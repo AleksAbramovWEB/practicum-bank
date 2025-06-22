@@ -46,3 +46,8 @@ spec:
                 configMapKeyRef:
                   name: cash-config
                   key: API_NOTIFICATION
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: cash-config
+                  key: SERVER_PORT
