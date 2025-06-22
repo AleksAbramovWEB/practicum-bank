@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cash
+  name: transfer
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: cash
+      app: transfer
   template:
     metadata:
       labels:
-        app: cash
+        app: transfer
     spec:
       containers:
-        - name: cash
+        - name: transfer
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -24,25 +24,30 @@ spec:
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
               valueFrom:
                 configMapKeyRef:
-                  name: cash-config
+                  name: transfer-config
                   key: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
             - name: API_ACCOUNT
               valueFrom:
                 configMapKeyRef:
-                  name: cash-config
+                  name: transfer-config
                   key: API_ACCOUNT
             - name: API_CASH
               valueFrom:
                 configMapKeyRef:
-                  name: cash-config
+                  name: transfer-config
                   key: API_CASH
             - name: API_BLOCKER
               valueFrom:
                 configMapKeyRef:
-                  name: cash-config
+                  name: transfer-config
                   key: API_BLOCKER
             - name: API_NOTIFICATION
               valueFrom:
                 configMapKeyRef:
-                  name: cash-config
+                  name: transfer-config
                   key: API_NOTIFICATION
+            - name: API_EXCHANGE
+              valueFrom:
+                configMapKeyRef:
+                  name: transfer-config
+                  key: API_EXCHANGE

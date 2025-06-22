@@ -1,10 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cash-config
+  name: transfer-config
 data:
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: "http://keycloak:8080/realms/bank"
-  API_ACCOUNT: "http://localhost:8082/api/account"
+  API_ACCOUNT: "http://localhost:8080/api/account"
   API_CASH: "http://localhost:8080/api/cash"
   API_BLOCKER: "http://localhost:8080/api/blocker"
   API_NOTIFICATION: "http://localhost:8080/api/notification"
+  API_EXCHANGE: "http://localhost:8080/api/exchange"
