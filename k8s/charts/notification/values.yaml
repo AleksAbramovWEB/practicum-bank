@@ -17,7 +17,7 @@ secrets:
     password: ""
 
 configMap:
-  jwtIssuerUri: "http://keycloak:8080/realms/bank"
+  jwtIssuerUri: ""
 
 env:
   JAVA_OPTS: "-Xms256m -Xmx512m"

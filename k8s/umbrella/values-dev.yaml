@@ -1,175 +1,64 @@
-global:
-  image:
-    pullPolicy: IfNotPresent
-    tag: latest
-  env:
-    JAVA_OPTS: "-Xms256m -Xmx512m"
+account:
+  configMap:
+    datasourceUrl: "jdbc:postgresql://postgres:5432/accounts"
+    jwtIssuerUri: "http://keycloak:8080/realms/bank"
 
-  replicaCount: 1
+blocker:
+  configMap:
+    jwtIssuerUri: "http://keycloak:8080/realms/bank"
 
+cash:
+  configMap:
+    jwtIssuerUri: "http://keycloak:8080/realms/bank"
+    api:
+      account: "http://account:8082"
+      cash: "http://cash:8083"
+      blocker: "http://blocker:8087"
+      notification: "http://notification:8088"
+
+exchange:
+  configMap:
+    datasourceUrl: "jdbc:postgresql://postgres:5432/exchange"
+    jwtIssuerUri: "http://keycloak:8080/realms/bank"
+
+exchange-generator:
   configMap:
     jwtIssuerUri: "http://keycloak:8080/realms/bank"
     keycloakTokenUrl: "http://keycloak:8080/realms/bank/protocol/openid-connect/token"
-    keycloakRedirectUrl: "http://localhost:8080/login/oauth2/code/{registrationId}"
     api:
-      account: "http://localhost:8080/api/account"
-      cash: "http://localhost:8080/api/cash"
-      blocker: "http://localhost:8080/api/blocker"
-      notification: "http://localhost:8080/api/notification"
-      exchange: "http://localhost:8080/api/exchange"
-      transfer: "http://localhost:8080/api/transfer"
+      exchange: "http://exchange"
 
-  resources: { }
-
-account:
-  image:
-    repository: account-practicum-bank
-
-  service:
-    type: ClusterIP
-    port: 8082
-
-  accountSecrets:
-    db: ""
-    username: ""
-    password: ""
-    oauth2_client_id: ""
-    oauth2_client_secret: ""
-
-  configMap:
-    datasourceUrl: "jdbc:postgresql://postgres:5432/accounts"
-
-blocker:
-  image:
-    repository: blocker-practicum-bank
-
-  service:
-    type: ClusterIP
-    port: 8087
-
-cash:
-  image:
-    repository: cash-practicum-bank
-
-  service:
-    type: ClusterIP
-    port: 8083
-
-exchange:
-  image:
-    repository: exchange-practicum-bank
-
-  service:
-    type: ClusterIP
-    port: 8084
-
-  configMap:
-    datasourceUrl: "jdbc:postgresql://postgres:5432/exchange"
-
-  secrets:
-    db: ""
-    username: ""
-    password: ""
-
-exchange-generator:
-  image:
-    repository: exchange-generator-practicum-bank
-
-  service:
-    type: ClusterIP
-    port: 8085
-
-  secrets:
-    oauth2:
-      clientId: ""
-      secret: ""
 
 front-ui:
-  image:
-    repository: front-ui-practicum-bank
-
-  service:
-    type: ClusterIP
-    port: 8081
-
-  secrets:
-    keycloakAdmin:
-      serverUrl: ""
-      username: ""
-      password: ""
-      realm: ""
-    oauth2:
-      clientId: ""
-      clientSecret: ""
+  configMap:
+    jwtIssuerUri: "http://keycloak:8080/realms/bank"
+    keycloakTokenUrl: "http://keycloak:8080/realms/bank/protocol/openid-connect/token"
+    keycloakRedirectUrl: "http://localhost/login/oauth2/code/{registrationId}"
+    api:
+      account: "http://account:8082"
+      cash: "http://cash:8083"
+      blocker: "http://blocker:8087"
+      notification: "http://notification:8088"
+      exchange: "http://exchange:8084"
+      transfer: "http://transfer:8086"
 
 keycloak:
-  image:
-    repository: keycloak/keycloak
-    tag: "26.2.4"
-
-  service:
-    type: ClusterIP
-    port: 8080
-    debugPort: 5005
-
-  env:
-    KEYCLOAK_ADMIN: ""
-    KEYCLOAK_ADMIN_PASSWORD: ""
-    POSTGRES_USER: ""
-    POSTGRES_PASSWORD: ""
-
   postgres:
-    host: postgres
+    host: "postgres"
     port: 5432
-    db: keycloak
-
-  persistence:
-    data:
-      enabled: true
-      size: 1Gi
-      accessModes: [ "ReadWriteOnce" ]
-    theme:
-      hostPath: /Users/abramovaleksandr/PhpstormProjects/practicum-bank/keycloak-themes
+    db: "keycloak"
 
 notification:
-  image:
-    repository: notification-practicum-bank
-
-  service:
-    type: ClusterIP
-    port: 8088
-
-  secrets:
-    mail:
-      host: ""
-      port: ""
-      username: ""
-      password: ""
-
-postgres:
-  image:
-    repository: postgres
-    tag: "16"
-    pullPolicy: IfNotPresent
-
-  persistence:
-    enabled: true
-    size: 1Gi
-
-  service:
-    type: ClusterIP
-    port: 5432
-
-  secrets:
-    db: ""
-    user: ""
-    password: ""
+  configMap:
+    jwtIssuerUri: "http://keycloak:8080/realms/bank"
 
 transfer:
-  image:
-    repository: transfer-practicum-bank
-    tag: latest
-
-  service:
-    type: ClusterIP
-    port: 8086
+  configMap:
+    jwtIssuerUri: "http://keycloak:8080/realms/bank"
+    api:
+      account: "http://account:8082"
+      cash: "http://cash:8083"
+      blocker: "http://blocker:8087"
+      notification: "http://notification:8088"
+      exchange: "http://exchange:8084"
+      transfer: "http://transfer:8086"

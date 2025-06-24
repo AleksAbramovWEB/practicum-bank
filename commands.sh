@@ -1,5 +1,7 @@
 # рестартонуть под
 kubectl rollout restart deployment account -n dev
+# рестартонуть все поды
+kubectl rollout restart deployment -n dev
 # посмотреть список подов в нейспесе дев
 kubectl get pods -n dev
 # посмотреть список по всему
@@ -45,8 +47,16 @@ kubectl delete all --all -n dev
 kubectl delete namespace dev
 # Удалить ресурс
 kubectl delete pv keycloak-theme-pv
+# посмотреть примененный конфиг в абрела
+helm get values practicum-bank -n dev --all
+
 # Прокинуть порт наружу
 kubectl port-forward svc/keycloak 8080:8080 -n dev
+
+sudo kubectl port-forward \
+            --namespace ingress-nginx \
+            service/ingress-nginx-controller \
+            80:80
 # Включить NGINX Ingress в Minikube
 kubectl minikube addons enable ingress
 # Применить namespace
@@ -67,3 +77,8 @@ helm dependency build
  minikube stop
  # запустить
  minikube start
+ # посмотреть список dns
+  kubectl get svc -n dev
+ # Установить gateway
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
+helm repo add nginx-stable https://helm.nginx.com/stable

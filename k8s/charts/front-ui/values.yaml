@@ -10,16 +10,16 @@ service:
   port: 8081
 
 configMap:
-  jwtIssuerUri: "http://keycloak:8080/realms/bank"
-  keycloakTokenUrl: "http://keycloak:8080/realms/bank/protocol/openid-connect/token"
-  keycloakRedirectUrl: "http://localhost:8080/login/oauth2/code/{registrationId}"
+  jwtIssuerUri: ""
+  keycloakTokenUrl: ""
+  keycloakRedirectUrl: ""
   api:
-    account: "http://localhost:8080/api/account"
-    cash: "http://localhost:8080/api/cash"
-    blocker: "http://localhost:8080/api/blocker"
-    notification: "http://localhost:8080/api/notification"
-    exchange: "http://localhost:8080/api/exchange"
-    transfer: "http://localhost:8080/api/transfer"
+    account: ""
+    cash: ""
+    blocker: ""
+    notification: ""
+    exchange: ""
+    transfer: ""
 
 secrets:
   keycloakAdmin:

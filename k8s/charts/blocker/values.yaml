@@ -13,6 +13,6 @@ env:
   JAVA_OPTS: "-Xms256m -Xmx512m"
 
 configMap:
-  jwtIssuerUri: "http://keycloak:8080/realms/bank"
+  jwtIssuerUri: ""
 
 resources: {}

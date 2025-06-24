@@ -13,13 +13,13 @@ env:
   JAVA_OPTS: "-Xms256m -Xmx512m"
 
 configMap:
-  jwtIssuerUri: "http://keycloak:8080/realms/bank"
+  jwtIssuerUri: ""
   api:
-    account: "http://localhost:8080/api/account"
-    cash: "http://localhost:8080/api/cash"
-    blocker: "http://localhost:8080/api/blocker"
-    notification: "http://localhost:8080/api/notification"
-    exchange: "http://localhost:8080/api/exchange"
-    transfer: "http://localhost:8080/api/transfer"
+    account: ""
+    cash: ""
+    blocker: ""
+    notification: ""
+    exchange: ""
+    transfer: ""
 
 resources: {}
