@@ -18,9 +18,9 @@ env:
   POSTGRES_PASSWORD: ""
 
 postgres:
-  host: ""
-  port: ""
-  db: ""
+  host: "postgres"
+  port: 5432
+  db: "keycloak"
 
 persistence:
   data:

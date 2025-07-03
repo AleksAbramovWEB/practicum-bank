@@ -49,4 +49,3 @@ out/
 /k8s/umbrella/secret-values-dev.yaml
 /k8s/umbrella/secret-values-test.yaml
 /k8s/umbrella/secret-values-prod.yaml
-/k8s/umbrella/Chart.lock

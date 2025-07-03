@@ -1,5 +1,5 @@
 # рестартонуть под
-kubectl rollout restart deployment account -n dev
+kubectl rollout restart deployment front-ui -n dev
 # рестартонуть все поды
 kubectl rollout restart deployment -n dev
 # посмотреть список подов в нейспесе дев
@@ -10,11 +10,13 @@ kubectl get all -n dev
 helm uninstall postgres -n dev
 # Удаляет все PVC (PersistentVolumeClaim) в namespace dev.
 kubectl delete pvc -n dev --all
+# Удалить образ
+minikube ssh -- docker image rm exchange-generator-practicum-bank:latest --force
 # сборка
-./gradlew :services:front-ui:bootJar
-docker build --no-cache -t front-ui-practicum-bank:latest -f services/front-ui/Dockerfile .
-minikube image load front-ui-practicum-bank:latest
-kubectl rollout restart deployment cash -n dev
+./gradlew :services:exchange-generator:bootJar
+docker build --no-cache -t exchange-generator-practicum-bank:latest -f services/exchange-generator/Dockerfile .
+minikube image load exchange-generator-practicum-bank:latest
+kubectl rollout restart deployment exchange-generator -n dev
 # установить чарт
 helm install front-ui k8s/charts/front-ui \
   -n dev --create-namespace \
@@ -30,13 +32,11 @@ kubectl exec -it -n dev postgres-0 -- psql -U bank
 # Просмотр логов
 kubectl logs -n dev deploy/account
 kubectl logs -n dev deploy/account -f
-kubectl logs -n dev -l app=keycloak -f
+kubectl logs -n dev -l app=front-ui -f
 # Посмотреть секреты
 kubectl get secret postgres-secret -n dev -o yaml
 # Посмотреть конфиг
 kubectl get configmap account-config -n dev -o yaml
-# Удалить образ
-minikube ssh -- docker image rm blocker-practicum-bank:latest --force
 # Загрузить образ
 minikube image load blocker-practicum-bank:latest
 # Удалить все поды
@@ -58,7 +58,7 @@ sudo kubectl port-forward \
             service/ingress-nginx-controller \
             80:80
 # Включить NGINX Ingress в Minikube
-kubectl minikube addons enable ingress
+minikube addons enable ingress
 # Применить namespace
 kubectl apply -f k8s/namespaces/dev.yaml
 # Подтянуть саб чарты в umbrella
@@ -69,16 +69,14 @@ helm dependency build
 # установить umbrella
  helm upgrade --install practicum-bank . \
                                       -n dev --create-namespace \
+                                      -f values.yaml \
                                       -f values-dev.yaml \
                                       -f secret-values-dev.yaml
  # проброска тунеля 19901508Oi!
- minikube tunnel
+minikube tunnel
  # остановить
- minikube stop
+minikube stop
  # запустить
- minikube start
+minikube start
  # посмотреть список dns
-  kubectl get svc -n dev
- # Установить gateway
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
-helm repo add nginx-stable https://helm.nginx.com/stable
+kubectl get svc -n dev
