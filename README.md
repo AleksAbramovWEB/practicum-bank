@@ -1,7 +1,7 @@
-## Сдача проектной работы девятого спринта
-#### Разработка приложений с использованием микросервисной архитектуры
+## Сдача проектной работы 10 спринта
+#### Развёртывание приложения с использованием CI/CD, Kubernetes, Helm
 
-### ✅  Устанавливаем переменное окружение в .env
+### ✅  Устанавливаем переменное окружение в .env для локального запуска и тестов
 
 ```
 POSTGRES_DB=
@@ -27,15 +27,41 @@ OAUTH2_REALM=
 ACCOUNT_SERVICE_POSTGRES_DB=
 
 BASE_URL=http://localhost:8080
-CONFIG_URL=http://localhost:8888
 
-GIT_URL=
-GIT_USERNAME=
-GIT_TOKEN=
+```
 
-CONSUL_HOST=
-CONSUL_PORT=
+### ✅  Устанавливаем переменное окружение в .env для jenkins
 
+```
+# путь до локального kubeconfig-файла (абсолютный!)
+KUBECONFIG_PATH=
+# токен для ghcr
+GHCR_TOKEN=
+# имя пользователя GitHub
+GITHUB_USERNAME=
+# токен для GitHub
+GITHUB_TOKEN=
+# репозиторий
+GITHUB_REPOSITORY=
+# Docker Registry
+DOCKER_REGISTRY=
+# пароль к базе данных
+DB_PASSWORD=
+```
+
+### ✅ Пример ручной установки чартов в кластер
+```bash
+cd k8s/charts/
+helm upgrade --install practicum-bank . \  
+                                  -n dev --create-namespace \  
+                                  -f values.yaml \  
+                                  -f values-dev.yaml \  
+                                  -f secret-values-dev.yaml  
+```
+
+### ✅ Включить NGINX Ingress в Minikube
+```bash
+minikube addons enable ingress  
 ```
 
 ### ✅ Сборка/старт приложения
