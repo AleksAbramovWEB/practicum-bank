@@ -11,12 +11,13 @@ helm uninstall postgres -n dev
 # Удаляет все PVC (PersistentVolumeClaim) в namespace dev.
 kubectl delete pvc -n dev --all
 # Удалить образ
-minikube ssh -- docker image rm exchange-generator-practicum-bank:latest --force
+minikube ssh -- docker image rm account-practicum-bank:latest --force
 # сборка
-./gradlew :services:exchange-generator:bootJar
-docker build --no-cache -t exchange-generator-practicum-bank:latest -f services/exchange-generator/Dockerfile .
-minikube image load exchange-generator-practicum-bank:latest
-kubectl rollout restart deployment exchange-generator -n dev
+./gradlew :services:notification:bootJar
+docker build --no-cache -t notification-practicum-bank:latest -f services/notification/Dockerfile .
+minikube image load front-ui-practicum-bank:latest
+kubectl rollout restart deployment front-ui -n dev
+kubectl logs -n dev -l app=front-ui -f
 # установить чарт
 helm install front-ui k8s/charts/front-ui \
   -n dev --create-namespace \
@@ -80,3 +81,12 @@ minikube stop
 minikube start
  # посмотреть список dns
 kubectl get svc -n dev
+
+minikube config view
+minikube status
+minikube start --memory=4096 --cpus=4
+minikube config set memory 4096
+minikube config set cpus 4
+minikube stop
+minikube delete
+minikube start

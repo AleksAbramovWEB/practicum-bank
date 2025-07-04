@@ -11,11 +11,23 @@ dependencies:
 - name: exchange-generator
   repository: file://../charts/exchange-generator
   version: 0.1.0
+- name: blocker
+  repository: file://../charts/blocker
+  version: 0.1.0
+- name: cash
+  repository: file://../charts/cash
+  version: 0.1.0
+- name: notification
+  repository: file://../charts/notification
+  version: 0.1.0
+- name: transfer
+  repository: file://../charts/transfer
+  version: 0.1.0
 - name: keycloak
   repository: file://../charts/keycloak
   version: 0.1.0
 - name: postgres
   repository: file://../charts/postgres
   version: 0.1.0
-digest: sha256:9e677120832a30ae8f6a2df9455ee1ae9a0ba242e80489a2081150f7523cdd36
-generated: "2025-07-03T22:43:58.023825+03:00"
+digest: sha256:bef41bf77efe614a7d0c951267dabad04b28522b6f7745f0b18f85ca2a1f3860
+generated: "2025-07-04T10:52:30.093893+03:00"

@@ -17,6 +17,18 @@ dependencies:
   - name: exchange-generator
     version: 0.1.0
     repository: "file://../charts/exchange-generator"
+  - name: blocker
+    version: 0.1.0
+    repository: "file://../charts/blocker"
+  - name: cash
+    version: 0.1.0
+    repository: "file://../charts/cash"
+  - name: notification
+    version: 0.1.0
+    repository: "file://../charts/notification"
+  - name: transfer
+    version: 0.1.0
+    repository: "file://../charts/transfer"
   - name: keycloak
     version: 0.1.0
     repository: "file://../charts/keycloak"
