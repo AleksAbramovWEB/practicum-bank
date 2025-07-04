@@ -49,3 +49,4 @@ out/
 /k8s/umbrella/secret-values-dev.yaml
 /k8s/umbrella/secret-values-test.yaml
 /k8s/umbrella/secret-values-prod.yaml
+/jenkins/.env
