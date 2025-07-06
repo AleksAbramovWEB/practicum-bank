@@ -3,10 +3,7 @@ package ru.abramov.practicum.bank.service.exchange.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.abramov.practicum.bank.service.exchange.dto.RateDto;
 import ru.abramov.practicum.bank.service.exchange.dto.ConvertRequestDto;
 import ru.abramov.practicum.bank.service.exchange.dto.ConvertResponseDto;
@@ -33,6 +30,7 @@ public class ExchangeController {
     }
 
     @GetMapping("/rates")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<List<RateDto>> rates() {
         return ResponseEntity.ok(exchangeService.rates());
     }

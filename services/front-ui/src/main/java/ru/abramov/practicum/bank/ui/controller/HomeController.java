@@ -1,6 +1,7 @@
 package ru.abramov.practicum.bank.ui.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,11 @@ import ru.abramov.practicum.bank.ui.service.UserService;
 public class HomeController {
 
     private final AccountClient accountClient;
+
     private final UserService userService;
+
+    @Value("${api.exchange}")
+    private String apiExchange;
 
     @GetMapping("/")
     public String home(Model model, @CurrentUser User user) {
@@ -34,6 +39,7 @@ public class HomeController {
         model.addAttribute("account", new OpenAccountDto());
         model.addAttribute("cashTransaction", new CashTransactionDto());
         model.addAttribute("transfer", new TransferDto());
+        model.addAttribute("apiExchange", apiExchange);
 
         return "home";
     }
