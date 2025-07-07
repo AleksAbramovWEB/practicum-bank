@@ -5,6 +5,8 @@ plugins {
 
 dependencies {
 
+    implementation("org.springframework.kafka:spring-kafka")
+
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 
     implementation("org.springframework.retry:spring-retry")
