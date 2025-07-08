@@ -16,16 +16,7 @@ import static org.mockito.Mockito.*;
 @TestConfiguration
 public class MockKeycloakConfig {
 
-//    @Bean
-//    @Primary
-//    public KeycloakAdminProperty keycloakAdminProperty() {
-//        KeycloakAdminProperty property = new KeycloakAdminProperty();
-//        property.setRealm("bank");
-//        property.setServerUrl("http://localhost:8480");
-//        return property;
-//    }
-
-    @Bean
+    @Bean(name = "mockKeycloak")
     @Primary
     public Keycloak keycloak() {
         Keycloak mockKeycloak = mock(Keycloak.class);

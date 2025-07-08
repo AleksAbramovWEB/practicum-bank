@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.abramov.practicum.bank.client.account.api.AccountClient;
@@ -20,6 +22,7 @@ import ru.abramov.practicum.bank.client.blocker.api.BlockerClient;
 import ru.abramov.practicum.bank.client.blocker.model.CashCheckDto;
 import ru.abramov.practicum.bank.client.blocker.model.ResultCheckDto;
 import ru.abramov.practicum.bank.client.notification.api.NotificationClient;
+import ru.abramov.practicum.bank.common.config.KafkaConfig;
 import ru.abramov.practicum.bank.service.cash.config.JwtTestConfig;
 import ru.abramov.practicum.bank.service.cash.config.MockClientConfig;
 import ru.abramov.practicum.bank.service.cash.dto.CashTransactionDto;
@@ -35,6 +38,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Import({JwtTestConfig.class, MockClientConfig.class})
+@EmbeddedKafka(partitions = 1, topics = {KafkaConfig.MAIL_TOPIC}, brokerProperties = {
+        "listeners=PLAINTEXT://localhost:9092",
+        "port=9092"
+})
+@DirtiesContext
 class CashControllerTest {
 
     @Autowired

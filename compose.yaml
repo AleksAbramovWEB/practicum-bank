@@ -50,7 +50,7 @@ services:
 
   account:
     env_file:
-      - .env
+      - services/account/.env
     build:
       context: .
       dockerfile: services/account/Dockerfile
@@ -62,7 +62,7 @@ services:
 
   blocker:
     env_file:
-      - .env
+      - services/blocker/.env
     build:
       context: .
       dockerfile: services/blocker/Dockerfile
@@ -74,7 +74,7 @@ services:
 
   cash:
     env_file:
-      - .env
+      - services/cash/.env
     build:
       context: .
       dockerfile: services/cash/Dockerfile
@@ -86,7 +86,7 @@ services:
 
   exchange:
     env_file:
-      - .env
+      - services/exchange/.env
     build:
       context: .
       dockerfile: services/exchange/Dockerfile
@@ -98,7 +98,7 @@ services:
 
   exchange_generator:
     env_file:
-      - .env
+      - services/exchange-generator/.env
     build:
       context: .
       dockerfile: services/exchange-generator/Dockerfile
@@ -110,7 +110,7 @@ services:
 
   front_ui:
     env_file:
-      - .env
+      - services/front-ui/.env
     build:
       context: .
       dockerfile: services/front-ui/Dockerfile
@@ -122,7 +122,7 @@ services:
 
   notification:
     env_file:
-      - .env
+      - services/notification/.env
     build:
       context: .
       dockerfile: services/notification/Dockerfile
@@ -134,7 +134,7 @@ services:
 
   transfer:
     env_file:
-      - .env
+      - services/transfer/.env
     build:
       context: .
       dockerfile: services/transfer/Dockerfile

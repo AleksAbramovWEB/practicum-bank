@@ -5,29 +5,39 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import ru.abramov.practicum.bank.client.notification.api.NotificationClient;
+
+import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.argThat;
+
+import ru.abramov.practicum.bank.common.config.KafkaConfig;
+import ru.abramov.practicum.bank.common.massage.Mail;
 import ru.abramov.practicum.bank.common.model.User;
 import ru.abramov.practicum.bank.service.cash.dto.CashTransactionDto;
 import ru.abramov.practicum.bank.service.cash.service.NotificationService;
 import ru.abramov.practicum.bank.service.cash.service.impl.NotificationServiceImpl;
 
 
-import static org.mockito.Mockito.*;
-
 @SpringJUnitConfig(classes = NotificationServiceTest.Config.class)
 class NotificationServiceTest {
 
     @Configuration
     static class Config {
-        @Bean NotificationClient notificationClient() { return mock(NotificationClient.class); }
-        @Bean NotificationService notificationService(NotificationClient client) {
-            return new NotificationServiceImpl(client);
+
+        @Bean
+        public KafkaTemplate<String, Mail> kafkaTemplate() {
+            return mock(KafkaTemplate.class);
+        }
+
+        @Bean
+        public NotificationService notificationService(KafkaTemplate<String, Mail> kafkaTemplate) {
+            return new NotificationServiceImpl(kafkaTemplate);
         }
     }
 
     @Autowired
-    private NotificationClient notificationClient;
+    private KafkaTemplate<String, Mail> kafkaTemplate;
 
     @Autowired
     private NotificationService notificationService;
@@ -37,8 +47,6 @@ class NotificationServiceTest {
 
     @BeforeEach
     void setup() {
-        reset(notificationClient);
-
         dto = new CashTransactionDto();
         dto.setAccountNumber("ACC123");
 
@@ -47,24 +55,33 @@ class NotificationServiceTest {
     }
 
     @Test
-    void notifyPutCash_ShouldSendMail() {
+    void notifyPutCash_ShouldSendKafkaMessage() {
         notificationService.notifyPutCash(dto, user);
 
-        verify(notificationClient).sendMail(argThat(mail ->
-                mail.getEmail().equals("user@example.com")
-                        && mail.getSubject().equals("Пополнение исполнено")
-                        && mail.getText().equals("Пополнение счета ACC123 исполнено")
-        ));
+        verify(kafkaTemplate).send(
+                eq(KafkaConfig.MAIL_TOPIC),
+                anyString(),
+                argThat(mail ->
+                        mail.getEmail().equals("user@example.com") &&
+                                mail.getSubject().equals("Пополнение исполнено") &&
+                                mail.getText().equals("Пополнение счета ACC123 исполнено")
+                )
+        );
     }
 
+
     @Test
-    void notifyWithdrawCash_ShouldSendMail() {
+    void notifyWithdrawCash_ShouldSendKafkaMessage() {
         notificationService.notifyWithdrawCash(dto, user);
 
-        verify(notificationClient).sendMail(argThat(mail ->
-                mail.getEmail().equals("user@example.com")
-                        && mail.getSubject().equals("Вывод средств исполнен")
-                        && mail.getText().equals("Вывод средств исполнено со счета ACC123")
-        ));
+        verify(kafkaTemplate).send(
+                eq(KafkaConfig.MAIL_TOPIC),
+                anyString(),
+                argThat(mail ->
+                        mail.getEmail().equals("user@example.com") &&
+                                mail.getSubject().equals("Вывод средств исполнен") &&
+                                mail.getText().equals("Вывод средств исполнено со счета ACC123")
+                )
+        );
     }
 }

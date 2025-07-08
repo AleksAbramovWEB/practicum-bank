@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Primary;
 @TestConfiguration
 public class MockFeignSecurityConfig {
 
-    @Bean
+    @Bean(name = "mockUserTokenRelayInterceptor")
     @Primary
     public RequestInterceptor userTokenRelayInterceptor() {
         return template -> {};
