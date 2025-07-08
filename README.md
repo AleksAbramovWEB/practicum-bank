@@ -49,6 +49,15 @@ DOCKER_REGISTRY=
 DB_PASSWORD=
 ```
 
+### ✅ Добавить репозиторий с kafka
+```bash
+helm repo add bitnami "https://helm-charts.itboon.top/bitnami" --force-update
+"bitnami" has been added to your repositories
+helm search repo bitnami/kafka
+NAME            CHART VERSION   APP VERSION     DESCRIPTION
+bitnami/kafka   32.3.1          4.0.0         
+```
+
 ### ✅ Пример ручной установки чартов в кластер
 ```bash
 cd k8s/charts/
