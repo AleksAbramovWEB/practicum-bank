@@ -14,5 +14,6 @@ env:
 
 configMap:
   jwtIssuerUri: ""
+  zipkin: ""
 
 resources: {}

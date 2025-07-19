@@ -3,6 +3,7 @@ global:
   keycloakTokenUrl: "http://practicum-bank/realms/bank/protocol/openid-connect/token"
   keycloakRedirectUrl: "http://practicum-bank/login/oauth2/code/{registrationId}"
   kafkaBootstrapServers: "kafka.kafka:9092"
+  zipkin: "http://zipkin:9411/api/v2/spans"
   api:
     account: "http://practicum-bank/api/account"
     cash: "http://practicum-bank/api/cash"
@@ -61,3 +62,16 @@ kafka:
         config:
           retention.ms: 259200000
           cleanup.policy: delete
+
+zipkin:
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 9411
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi

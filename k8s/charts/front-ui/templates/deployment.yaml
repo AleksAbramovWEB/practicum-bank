@@ -35,6 +35,11 @@ spec:
                 configMapKeyRef:
                   name: front-ui-config
                   key: SERVER_PORT
+            - name: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: front-ui-config
+                  key: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
             - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECT_URL
               valueFrom:
                 configMapKeyRef:

@@ -58,6 +58,12 @@ NAME            CHART VERSION   APP VERSION     DESCRIPTION
 bitnami/kafka   32.3.1          4.0.0         
 ```
 
+### ✅ Добавить репозиторий с zipkin
+```bash
+helm repo add zipkin "https://openzipkin.github.io/zipkin-helm" --force-update
+"zipkin" has been added to your repositories
+```
+
 ### ✅ Пример ручной установки чартов в кластер
 ```bash
 cd k8s/charts/

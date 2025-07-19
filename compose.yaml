@@ -48,6 +48,15 @@ services:
     depends_on:
       - postgres
 
+  zipkin:
+    image: openzipkin/zipkin:3.5
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    environment:
+      - STORAGE_TYPE=mem
+    restart: always
+
   account:
     env_file:
       - services/account/.env

@@ -13,6 +13,7 @@ configMap:
   jwtIssuerUri: ""
   keycloakTokenUrl: ""
   keycloakRedirectUrl: ""
+  zipkin: ""
   api:
     account: ""
     cash: ""

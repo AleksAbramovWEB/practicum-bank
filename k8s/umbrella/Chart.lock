@@ -32,5 +32,8 @@ dependencies:
 - name: kafka
   repository: https://helm-charts.itboon.top/bitnami
   version: 32.3.1
-digest: sha256:454d4064e67fbe8a14a76c50f95ca14a0f6c41bb2063579636261da2cbfaf27f
-generated: "2025-07-08T16:42:02.469492+03:00"
+- name: zipkin
+  repository: https://openzipkin.github.io/zipkin-helm
+  version: 0.3.6
+digest: sha256:699911eee50ef89852b381f0af3634fb4de36641e3a81e4db607da7af6d28696
+generated: "2025-07-19T10:50:50.057701+03:00"

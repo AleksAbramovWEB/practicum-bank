@@ -38,3 +38,6 @@ dependencies:
   - name: kafka
     version: 32.3.1
     repository: "https://helm-charts.itboon.top/bitnami"
+  - name: zipkin
+    version: 0.3.6
+    repository: "https://openzipkin.github.io/zipkin-helm"
