@@ -57,6 +57,26 @@ services:
       - STORAGE_TYPE=mem
     restart: always
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/docker-prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - grafana_storage:/var/lib/grafana
+    depends_on:
+      - prometheus
+
   account:
     env_file:
       - services/account/.env
@@ -157,3 +177,4 @@ volumes:
   postgres_data:
   keycloak_data:
   kafka_data:
+  grafana_storage:

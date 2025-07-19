@@ -75,3 +75,140 @@ zipkin:
     limits:
       cpu: 200m
       memory: 512Mi
+
+prometheus:
+  server:
+    global:
+      scrape_interval: 15s
+
+    configMapOverrideName: practicum-prometheus-config
+
+    extraScrapeConfigs:
+      - job_name: 'spring-app'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets:
+            - account:8082
+            - blocker:8087
+            - cash:8083
+            - exchange:8084
+            - exchange-generator:8085
+            - front-ui:8081
+            - notification:8088
+            - transfer:8086
+
+    additionalPrometheusRulesMap:
+      practicum-custom-rules:
+        groups:
+          - name: http_errors
+            rules:
+              - alert: HighHttp5xxErrorRate
+                expr: >
+                  sum(rate(http_server_requests_seconds_count{status=~"5.."}[1m])) 
+                  / 
+                  sum(rate(http_server_requests_seconds_count[1m])) 
+                  > 0.1
+                for: 2m
+                labels:
+                  severity: warning
+                annotations:
+                  summary: "Высокий процент 5xx ошибок"
+                  description: "Более 10% запросов за минуту вернули 5xx"
+
+          - name: login_failures
+            rules:
+              - alert: HighLoginFailureRate
+                expr: |
+                  sum by (login) (increase(custom_login_failure_total[5m])) > 5
+                for: 1m
+                labels:
+                  severity: critical
+                annotations:
+                  summary: "Слишком много неудачных логинов"
+                  description: "Пользователь {{ $labels.login }} совершил более 5 неудачных логинов за 5 минут"
+
+          - name: fraud_detection
+            rules:
+              - alert: SuspiciousTransferBlocked
+                expr: |
+                  increase(custom_transfer_blocked_total[1m]) > 0
+                for: 0m
+                labels:
+                  severity: warning
+                annotations:
+                  summary: "Заблокирован подозрительный перевод"
+                  description: "Обнаружена подозрительная операция. Пользователь: {{ $labels.login }}"
+
+          - name: notification_failures
+            rules:
+              - alert: NotificationSendFailure
+                expr: |
+                  increase(custom_notification_failure_total[5m]) > 0
+                for: 30s
+                labels:
+                  severity: warning
+                annotations:
+                  summary: "Ошибка отправки уведомления"
+                  description: "Невозможно отправить уведомление пользователю {{ $labels.login }}"
+
+          - name: currency_rates
+            rules:
+              - alert: CurrencyRateNotUpdated
+                expr: |
+                  increase(currency_rates_updated_total[10m]) == 0
+                for: 2m
+                labels:
+                  severity: critical
+                annotations:
+                  summary: "Не обновлялся курс валют"
+                  description: "Курс валют не обновлялся последние 10 минут"
+
+grafana:
+  enabled: true
+
+  adminUser: admin
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: false
+
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          url: http://practicum-bank-prometheus-server
+          isDefault: true
+
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: default
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+
+  dashboards:
+    default:
+      spring-boot:
+        gnetId: 10280
+        revision: 1
+        datasource: Prometheus
+      jvm-overview:
+        gnetId: 4701
+        revision: 2
+        datasource: Prometheus
+
+  persistence:
+    enabled: true
+    size: 1Gi

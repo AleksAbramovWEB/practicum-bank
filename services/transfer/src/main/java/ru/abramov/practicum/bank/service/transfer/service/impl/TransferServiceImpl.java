@@ -18,6 +18,7 @@ import ru.abramov.practicum.bank.client.exchange.model.ConvertRequestDto;
 import ru.abramov.practicum.bank.client.exchange.model.ConvertResponseDto;
 import ru.abramov.practicum.bank.client.exchange.model.Currency;
 import ru.abramov.practicum.bank.common.model.User;
+import ru.abramov.practicum.bank.common.service.MetricService;
 import ru.abramov.practicum.bank.service.transfer.dto.TransferDto;
 import ru.abramov.practicum.bank.service.transfer.service.TransferService;
 
@@ -31,6 +32,7 @@ public class TransferServiceImpl implements TransferService {
     private final AccountClient accountClient;
     private final ExchangeClient exchangeClient;
     private final BlockerClient blockerClient;
+    private final MetricService metricService;
 
     @Override
     @Retryable(
@@ -93,6 +95,8 @@ public class TransferServiceImpl implements TransferService {
                 ex.getMessage(),
                 user
         );
+
+        metricService.recordTransferFailure(transferDto.getFromAccount(), transferDto.getToAccount());
 
         throw new IllegalStateException("Transfer failed and was rolled back. Manual intervention required.", ex);
     }

@@ -35,5 +35,15 @@ management:
     tracing:
       endpoint: ${MANAGEMENT_ZIPKIN_TRACING_ENDPOINT:http://localhost:9411/api/v2/spans}
 
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
 api:
   exchange: ${API_EXCHANGE:http://localhost:8080/api/exchange"}
