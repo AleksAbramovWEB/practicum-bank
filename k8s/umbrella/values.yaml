@@ -229,9 +229,9 @@ logstash:
     monitoring.conf: |
       input {
         kafka {
-          bootstrap_servers => "bank-app-kafka-broker-0.bank-app-kafka-broker-headless:9092,bank-app-kafka-broker-1.bank-app-kafka-broker-headless:9092"
-          topics => ["input-logs"]
-          group_id => "logs-group"
+          bootstrap_servers => "kafka.kafka:9092"
+          topics => ["microservice-logs"]
+          group_id => "logstash-group"
         }
       }
       filter {
