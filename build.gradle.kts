@@ -43,10 +43,16 @@ subprojects {
     }
 
     dependencies {
+        implementation("org.springframework.boot:spring-boot-starter-web") {
+            exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+        }
+
         implementation("org.springframework.boot:spring-boot-starter-actuator")
         implementation("io.micrometer:micrometer-tracing-bridge-otel")
         implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
         implementation("io.micrometer:micrometer-registry-prometheus")
+        implementation("org.springframework.boot:spring-boot-starter-log4j2")
+        implementation("org.apache.kafka:kafka-clients")
 
         implementation("org.springframework.boot:spring-boot-starter-validation")
 
@@ -71,6 +77,12 @@ subprojects {
         implementation("com.fasterxml.jackson.core:jackson-annotations")
     }
 
+    configurations.all {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+        exclude(group = "ch.qos.logback", module = "logback-classic")
+        exclude(group = "ch.qos.logback", module = "logback-core")
+        exclude(group = "org.apache.logging.log4j", module = "log4j-to-slf4j")
+    }
 
     tasks.withType<Test> {
         useJUnitPlatform()

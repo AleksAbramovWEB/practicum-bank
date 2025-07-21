@@ -212,3 +212,81 @@ grafana:
   persistence:
     enabled: true
     size: 1Gi
+
+logstash:
+  enabled: true
+  imageTag: 8.18.0
+  esJavaOpts: "-Xmx1g -Xms1g"
+  extraEnvs:
+    - name: LOGSTASH_SETTING_XPACK_MONITORING_ENABLED
+      value: "false"
+  logstashConfig:
+    logstash.yml: |
+      xpack.monitoring.enabled: false
+      xpack.monitoring.elasticsearch.hosts: ["https://elasticsearch:9200"]
+      xpack.monitoring.elasticsearch.ssl.verification_mode: "none"
+  logstashPipeline:
+    monitoring.conf: |
+      input {
+        kafka {
+          bootstrap_servers => "bank-app-kafka-broker-0.bank-app-kafka-broker-headless:9092,bank-app-kafka-broker-1.bank-app-kafka-broker-headless:9092"
+          topics => ["input-logs"]
+          group_id => "logs-group"
+        }
+      }
+      filter {
+        grok {
+          match => { "message" => "%{TIME:time} %{LOGLEVEL:log-level}%{SPACE} \[%{DATA:app}/%{DATA:method}/%{DATA:line}/%{DATA:traceId}/%{DATA:spanId}\]: %{GREEDYDATA:msg}" }
+        }
+      }
+      output {
+        elasticsearch {
+          hosts => ["https://elasticsearch:9200"]
+          index => "logs-%{+dd.MM.YYYY}"
+          retry_on_conflict => 3
+          action => "create"
+          ssl_enabled => true
+          ssl_verification_mode => "none"
+        }
+      }
+elasticsearch:
+  enabled: true
+  tls:
+    enabled: false
+  masterService: "elasticsearch"
+  imageTag: 8.18.0
+  replicas: 1
+  minimumMasterNodes: 1
+  esJavaOpts: "-Xmx1g -Xms1g"
+  clusterHealthCheckParams: ""
+  security:
+    enabled: true
+    elasticPassword: "elastic"
+    createDefaultSecret: true
+  esConfig:
+    elasticsearch.yml: |
+      xpack.security.http.ssl.enabled: false
+      xpack.security.enabled: true
+
+kibana:
+  enabled: false
+  replicaCount: 1
+  elasticsearchHosts: "https://elasticsearch:9200"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  service:
+    type: NodePort
+    nodePort: 32000
+  ingress:
+    enabled: true
+    className: "nginx"
+    hosts:
+      - host: kibana.example.com
+        paths:
+          - path: /
+            pathType: Prefix

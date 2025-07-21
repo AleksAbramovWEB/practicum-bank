@@ -30,6 +30,11 @@ spec:
                 configMapKeyRef:
                   name: front-ui-config
                   key: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI
+            - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: front-ui-config
+                  key: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
             - name: SERVER_PORT
               valueFrom:
                 configMapKeyRef:

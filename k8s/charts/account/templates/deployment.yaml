@@ -53,3 +53,8 @@ spec:
                 configMapKeyRef:
                   name: account-config
                   key: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
+            - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: account-config
+                  key: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS

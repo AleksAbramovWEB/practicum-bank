@@ -64,6 +64,12 @@ helm repo add zipkin "https://openzipkin.github.io/zipkin-helm" --force-update
 "zipkin" has been added to your repositories
 ```
 
+### ✅ Добавить репозиторий для ELK
+```bash
+helm repo add elastic https://helm.elastic.co 
+"elastic" has been added to your repositories
+```
+
 ### ✅ Пример ручной установки чартов в кластер
 ```bash
 cd k8s/charts/
