@@ -14,6 +14,7 @@ import ru.abramov.practicum.bank.service.account.mapper.AccountMapper;
 import ru.abramov.practicum.bank.service.account.model.*;
 import ru.abramov.practicum.bank.service.account.repostory.AccountRepository;
 import ru.abramov.practicum.bank.service.account.service.AccountService;
+import ru.abramov.practicum.bank.service.account.service.NotificationService;
 import ru.abramov.practicum.bank.service.account.service.NumberAccountService;
 import ru.abramov.practicum.bank.service.account.service.impl.AccountServiceImpl;
 
@@ -35,8 +36,9 @@ class AccountServiceTest {
         @Bean AccountRepository accountRepository() { return mock(AccountRepository.class); }
         @Bean AccountMapper accountMapper() { return mock(AccountMapper.class); }
         @Bean NumberAccountService numberAccountService() { return mock(NumberAccountService.class); }
-        @Bean AccountService accountService(AccountRepository accountRepository, AccountMapper accountMapper, NumberAccountService numberAccountService) {
-            return new AccountServiceImpl(accountRepository, accountMapper, numberAccountService);
+        @Bean NotificationService notificationService() { return mock(NotificationService.class); }
+        @Bean AccountService accountService(AccountRepository accountRepository, AccountMapper accountMapper, NumberAccountService numberAccountService, NotificationService notificationService) {
+            return new AccountServiceImpl(accountRepository, accountMapper, numberAccountService, notificationService);
         }
     }
 

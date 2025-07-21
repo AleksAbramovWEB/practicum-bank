@@ -13,8 +13,10 @@ import ru.abramov.practicum.bank.client.blocker.model.CashCheckDto;
 import ru.abramov.practicum.bank.client.blocker.model.ResultCheckDto;
 import ru.abramov.practicum.bank.common.exception.BadRequestException;
 import ru.abramov.practicum.bank.common.model.User;
+import ru.abramov.practicum.bank.common.service.MetricService;
 import ru.abramov.practicum.bank.service.cash.dto.CashTransactionDto;
 import ru.abramov.practicum.bank.service.cash.service.CashService;
+import ru.abramov.practicum.bank.service.cash.service.NotificationService;
 import ru.abramov.practicum.bank.service.cash.service.impl.CashServiceImpl;
 
 import java.math.BigDecimal;
@@ -29,8 +31,10 @@ class CashServiceTest {
     static class Config {
         @Bean AccountClient accountClient() { return mock(AccountClient.class); }
         @Bean BlockerClient blockerClient() { return mock(BlockerClient.class); }
-        @Bean CashService cashService(AccountClient accountClient, BlockerClient blockerClient) {
-            return new CashServiceImpl(accountClient, blockerClient);
+        @Bean MetricService metricService() { return mock(MetricService.class); }
+        @Bean NotificationService notificationService() { return mock(NotificationService.class); }
+        @Bean CashService cashService(AccountClient accountClient, BlockerClient blockerClient, MetricService metricService, NotificationService notificationService) {
+            return new CashServiceImpl(accountClient, blockerClient, metricService, notificationService);
         }
     }
 

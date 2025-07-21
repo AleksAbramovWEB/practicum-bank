@@ -20,6 +20,7 @@ import ru.abramov.practicum.bank.client.exchange.model.Currency;
 import ru.abramov.practicum.bank.common.model.User;
 import ru.abramov.practicum.bank.common.service.MetricService;
 import ru.abramov.practicum.bank.service.transfer.dto.TransferDto;
+import ru.abramov.practicum.bank.service.transfer.service.NotificationService;
 import ru.abramov.practicum.bank.service.transfer.service.TransferService;
 
 import java.util.Objects;
@@ -33,6 +34,7 @@ public class TransferServiceImpl implements TransferService {
     private final ExchangeClient exchangeClient;
     private final BlockerClient blockerClient;
     private final MetricService metricService;
+    private final NotificationService notificationService;
 
     @Override
     @Retryable(
@@ -73,6 +75,8 @@ public class TransferServiceImpl implements TransferService {
             toChange.setVersion(accountTo.getVersion());
 
             accountClient.changeBalance(accountTo.getId(), toChange);
+
+            notificationService.notify(transferDto, user);
 
         } catch (RuntimeException ex) {
             AccountDto updatedFrom = accountClient.getAccountByNumber(transferDto.getFromAccount());

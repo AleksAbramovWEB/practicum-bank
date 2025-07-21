@@ -8,7 +8,6 @@ import ru.abramov.practicum.bank.service.account.dto.AccountDto;
 import ru.abramov.practicum.bank.common.exception.BadRequestException;
 import ru.abramov.practicum.bank.common.exception.NotFoundException;
 import ru.abramov.practicum.bank.common.model.User;
-import ru.abramov.practicum.bank.service.account.dto.OpenAccountDto;
 import ru.abramov.practicum.bank.service.account.mapper.AccountMapper;
 import ru.abramov.practicum.bank.service.account.model.Account;
 import ru.abramov.practicum.bank.service.account.model.AccountStatus;
@@ -16,7 +15,7 @@ import ru.abramov.practicum.bank.service.account.model.Currency;
 import ru.abramov.practicum.bank.service.account.repostory.AccountRepository;
 import ru.abramov.practicum.bank.service.account.service.AccountService;
 import ru.abramov.practicum.bank.service.account.service.NumberAccountService;
-
+import ru.abramov.practicum.bank.service.account.service.NotificationService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,6 +30,8 @@ public class AccountServiceImpl implements AccountService {
     private final AccountMapper accountMapper;
 
     private final NumberAccountService numberAccountService;
+
+    private final NotificationService transferService;
 
     @Override
     public List<AccountDto> getAccounts(String userId) {
@@ -65,7 +66,11 @@ public class AccountServiceImpl implements AccountService {
 
         account = accountRepository.save(account);
 
-        return accountMapper.toDto(account);
+        AccountDto accountDto = accountMapper.toDto(account);
+
+        transferService.openAccount(accountDto, user);
+
+        return accountDto;
     }
 
     @Override

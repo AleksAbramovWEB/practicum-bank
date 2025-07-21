@@ -18,6 +18,7 @@ import ru.abramov.practicum.bank.common.model.User;
 import ru.abramov.practicum.bank.common.service.MetricService;
 import ru.abramov.practicum.bank.service.cash.dto.CashTransactionDto;
 import ru.abramov.practicum.bank.service.cash.service.CashService;
+import ru.abramov.practicum.bank.service.cash.service.NotificationService;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class CashServiceImpl implements CashService {
     private final AccountClient accountClient;
     private final BlockerClient blockerClient;
     private final MetricService metricService;
+    private final NotificationService notificationService;
 
     @Override
     @Retryable(
@@ -51,6 +53,8 @@ public class CashServiceImpl implements CashService {
         changeBalanceDto.setVersion(accountDto.getVersion());
 
         accountClient.changeBalance(accountDto.getId(), changeBalanceDto);
+
+        notificationService.notifyPutCash(transactionDto, user);
     }
 
     @Override
@@ -74,6 +78,8 @@ public class CashServiceImpl implements CashService {
         changeBalanceDto.setVersion(accountDto.getVersion());
 
         accountClient.changeBalance(accountDto.getId(), changeBalanceDto);
+
+        notificationService.notifyWithdrawCash(transactionDto, user);
     }
 
     @Recover
